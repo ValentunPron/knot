@@ -7,6 +7,7 @@ import Topbar from "@/components/shared/Topbar";
 import LeftSidebar from "@/components/shared/LeftSidebar";
 import RightSidebar from "@/components/shared/RightSidebar";
 import Bottombar from "@/components/shared/Bottombar";
+import { ukUA } from "@clerk/localizations";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,12 +22,12 @@ export default function RootLayout({
     children: React.ReactNode
   }) {
     return (
-      <ClerkProvider>
+      <ClerkProvider localization={ukUA}>
         <html lang="ua">
           <body className={inter.className}>
             <Topbar />
 
-            <main>
+            <main className="flex">
               <LeftSidebar />
 
               <section className="main-container">
