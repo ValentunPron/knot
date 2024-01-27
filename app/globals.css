@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+img, video {
+  height: 100%;
+}
+
 @layer components {
   /* main */
   .main-container {
