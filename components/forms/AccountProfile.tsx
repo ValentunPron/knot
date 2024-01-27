@@ -14,6 +14,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { ChangeEvent } from 'react';
@@ -38,7 +39,7 @@ interface Props {
 
 const AccountProfile = ({ user, btnTitle}: Props) => {
     const [files, setFiles] = React.useState<File[]>([]);
-    const { startUpload } = useUploadThing('media');
+    const { startUpload }: any = useUploadThing('media');
     const router = useRouter();
     const pathname = usePathname();
 
@@ -145,6 +146,7 @@ const AccountProfile = ({ user, btnTitle}: Props) => {
                       onChange={(e) => handleImage(e, field.onChange)} 
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
           />
@@ -163,6 +165,7 @@ const AccountProfile = ({ user, btnTitle}: Props) => {
                     {...field}
                   />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -181,6 +184,7 @@ const AccountProfile = ({ user, btnTitle}: Props) => {
                     {...field}
                   />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -199,6 +203,7 @@ const AccountProfile = ({ user, btnTitle}: Props) => {
                     {...field}
                   />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />

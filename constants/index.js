@@ -23,7 +23,7 @@ export const sidebarLinks = [
     },
     {
       imgURL: create,
-      route: "/create-thread",
+      route: "/create-post",
       label: "Створити пост",
     },
     {

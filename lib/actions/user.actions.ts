@@ -14,9 +14,9 @@ interface Params {
 }
 
 export async function updateUser({userId, username, name, bio, image, path}: Params): Promise<void> {
-    connectToDB();
-
     try {
+        connectToDB();
+
         await User.findOneAndUpdate(
             {id: userId},
             {
@@ -24,7 +24,7 @@ export async function updateUser({userId, username, name, bio, image, path}: Par
                 name,
                 bio,
                 image,
-                onboarding: true,
+                onboarded: true,
             },
             { upsert: true}
         );
@@ -34,5 +34,15 @@ export async function updateUser({userId, username, name, bio, image, path}: Par
         }
     } catch (error: any) {
         throw new Error(`Помилка з create/update користувача ${error.message}`)
+    }
+}
+
+export async function fecthUser(userId: string) {    
+    try {
+        connectToDB();
+
+        return await User.findOne({id: userId})
+    } catch (error: any) {
+        throw new Error(`Помилка з полученням даних про користувача ${error.message}`)
     }
 }

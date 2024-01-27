@@ -18,9 +18,9 @@ export default function RootLayout({
   }) {
     return (
       <ClerkProvider localization={ukUA}>
-        <html lang="en">
-          <body className={`${inter.className} bg-dark-1`}>
-            {children}
+        <html lang="ua">
+          <body className={`${inter.className} bg-dark-1 h-full py-5 flex justify-center items-center`}>
+              {children}
             </body>
         </html>
       </ClerkProvider>
