@@ -27,6 +27,7 @@
         const pathname = usePathname();
 
         const [messagePost, setMessagePost] = React.useState('');
+        const [valuesPost, setValuesPost] = React.useState('');
 
         React.useEffect(() => {
             setMessagePost(textCreatedPost[Math.floor(Math.random() * 62)]);
@@ -55,8 +56,9 @@
         return (
             <Form {...form}>
                 <form 
-                    onSubmit={form.handleSubmit(onSubmit)} 
+                    onSubmit={form.handleSubmit(onSubmit)}
                     className="mt-10 flex flex-col justify-start gap-10"
+                    onChange={(e: any) => setValuesPost(e.target.value)}
                 >
                     <FormField
                         control={form.control}
@@ -72,6 +74,8 @@
                                     {...field}
                                 />
                             </FormControl>
+
+                            <p className={`text-light-2 ${valuesPost.length > 1000 ? 'text-red-500': ''}`}>Кількість символів 1000/{valuesPost.length}</p>
                             <FormMessage />
                         </FormItem>
                         )}

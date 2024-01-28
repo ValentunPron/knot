@@ -32,7 +32,7 @@ export async function createPost({text, author, communityId, path}: Params) {
     }
 }
 
-export async function fetchPost(pageNumber = 1, pageSize = 12) {
+export async function fetchPost(pageNumber = 1, pageSize = 20) {
     try {
         connectToDB();
 
@@ -41,7 +41,7 @@ export async function fetchPost(pageNumber = 1, pageSize = 12) {
         const postQuery = Post.find({parrendId: { $in: [null, undefined]}})
             .sort({createdAt: 'desc'})
             .skip(skipAmout)
-            .limit(pageNumber)
+            .limit(pageSize)
             .populate({path: 'author', model: 'User'})
             .populate({
                 path: 'children',
