@@ -19,8 +19,6 @@ export async function createPost({text, author, communityId, path}: Params) {
         connectToDB();
 
         const post = await Post.create({text, author, community: null});
-
-        console.log(author);
     
         await User.findByIdAndUpdate(author, {
             $push: { posts: post._id }
@@ -62,4 +60,40 @@ export async function fetchPost(pageNumber = 1, pageSize = 20) {
     } catch (error: any) {
         throw new Error(`Виникла помилка при загрузці поста: ${error.message}`)
     }
+}
+
+export async function fetchPostById(id: string) {
+    try {
+        connectToDB();
+
+        const post = await Post.findById(id)
+            .populate({
+                path: 'author',
+                model: User,
+                select: '_id id name image',
+            })
+            .populate({
+                path: 'children',
+                populate: [
+                    {
+                        path: 'author',
+                        model: User,
+                        select: '_id id name image'
+                    },
+                    {
+                        path: 'children',
+                        model: Post,
+                        populate: {
+                            path: 'author',
+                            model: User,
+                            select: '_id id name image'
+                        }
+                    }
+                ]
+            }).exec();
+
+        return post
+    } catch (error: any) {
+        throw new Error(`Виникла помилка: ${error.message}`);
+    }        
 }
