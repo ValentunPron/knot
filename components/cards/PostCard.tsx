@@ -1,10 +1,13 @@
 import Link from "next/link";
 import Image from "next/image";
+import { format } from 'date-fns';
+import { uk } from 'date-fns/locale';
 
 import heart from "@/assets/heart-gray.svg";
 import reply from "@/assets/reply.svg";
 import repost from "@/assets/repost.svg";
 import share from "@/assets/share.svg";
+
 
 interface Props {
     id: string,
@@ -41,8 +44,10 @@ const PostCard = ({
     comments,
     isComment
 }: Props) => {
+    const date = format(new Date(),"dd MMMM", {locale: uk});
+
     return (
-        <article className="flex w-full flex-col rounded-xl bg-dark-2 p-6">
+        <article className={`flex w-full flex-col rounded-xl ${isComment ? 'px-0 xs:px-6 mt-1' : 'bg-dark-2 p-6'}`}>
             <div className="flex items-start justify-between">
                 <div className="flex w-full flex-1 flex-row gap-4">
                     <div className="flex flex-col items-center">
@@ -64,7 +69,7 @@ const PostCard = ({
 
                         <p className="mt-2 text-small-regular text-light-2">{content}</p>
 
-                        <div className="mt-5 flex-col gap-3">
+                        <div className={`${isComment && 'mb-7'} mt-5 flex-col gap-3`}>
                             <div className="flex gap-4">
                                 <Image src={heart} alt="heart" width={26} height={26} className="cursor-pointer object-contain"/>
                                 <Link href={`/post/${id}`}>
@@ -85,6 +90,9 @@ const PostCard = ({
                     </div>
                 </div>
             </div>
+            {/* <span className="mt-4 text-light-2 text-small-medium">
+                {date}
+            </span> */}
         </article>
     )
 }

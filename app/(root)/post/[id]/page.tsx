@@ -43,9 +43,26 @@ const Page = async ({params}: {params: {id: string}}) => {
            <div className="mt-7">
                 <Comment
                     postId={post.id}
-                    currentUserImage={user.imageUrl}
+                    currentUserImage={userInfo.image}
                     currentUserId={JSON.stringify(userInfo._id)}
                 />
+           </div>
+
+           <div className="mt-10">
+            {post.children.map((postItem: any) => (
+                <PostCard 
+                    key={postItem._id}
+                    id={postItem._id}
+                    currentUserId={postItem?.id || ""}
+                    parentId={postItem.parentId}
+                    content={postItem.text}
+                    author={postItem.author}
+                    community={postItem.community}
+                    createdAt={postItem.createdAt}
+                    comments={postItem.children}
+                    isComment
+                />
+            ))}
            </div>
         </section>
     )

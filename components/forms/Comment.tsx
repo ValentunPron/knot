@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from '../ui/input';
 
 import { CommentValidation } from '@/lib/validations/post';
+import { addCommentToPost } from '@/lib/actions/post.actions';
 
 interface Props {
     postId: string,
@@ -40,17 +41,11 @@ const Comment = ({postId, currentUserImage, currentUserId}: Props) => {
     });
 
     const onSubmit = async (values: z.infer<typeof CommentValidation>) => {
-        // await createPost({ 
-        //     text: values.post,
-        //     author: userId,
-        //     communityId: null,
-        //     path: pathname,
-        
-        // });
+        await addCommentToPost(postId, values.post, JSON.parse(currentUserId), pathname);
 
-        // router.push('/')
+        setValuesPost(0);
+        form.reset();
     }
-
     
     return (
         <Form {...form}>
@@ -70,7 +65,7 @@ const Comment = ({postId, currentUserImage, currentUserId}: Props) => {
                                 alt='user avatar'
                                 width={48}
                                 height={48}
-                                className="rounded-full object-cover"
+                                className="rounded-full object-cover h-[48px]"
                            />
                         </FormLabel>
                         <FormControl className='border-none bg-transparent'>

@@ -79,7 +79,7 @@ function NewPost({userId}: {userId: string}) {
                     </FormItem>
                     )}
                 />
-                <Button type="submit" className='bg-primary-500'>
+                <Button type="submit" className='.comment-form_btn'>
                     Створити пост
                 </Button>
             </form>
