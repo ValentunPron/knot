@@ -7,6 +7,7 @@ import heart from "@/assets/heart-gray.svg";
 import reply from "@/assets/reply.svg";
 import repost from "@/assets/repost.svg";
 import share from "@/assets/share.svg";
+import { Button } from "../ui/button";
 
 
 interface Props {
@@ -24,6 +25,11 @@ interface Props {
         name: string,
         image: string,
     } | null,
+    likes: {
+        author: {
+            image: string
+        }
+    }[],
     createdAt:  string,
     comments: {
         author: {
@@ -39,12 +45,17 @@ const PostCard = ({
     parentId,
     content,
     author,
+    likes,
     community,
     createdAt,
     comments,
     isComment
 }: Props) => {
     const date = format(new Date(),"dd MMMM", {locale: uk});
+
+    const onToggleLike = async () => {
+        alert('Like');
+    }
 
     return (
         <article className={`flex w-full flex-col rounded-xl ${isComment ? 'px-0 xs:px-6 mt-1' : 'bg-dark-2 p-6'}`}>

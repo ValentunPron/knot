@@ -34,6 +34,7 @@ const Page = async ({params}: {params: {id: string}}) => {
                 parentId={post.parentId}
                 content={post.text}
                 author={post.author}
+                likes={post.likes}
                 community={post.community}
                 createdAt={post.createdAt}
                 comments={post.children}
@@ -57,6 +58,7 @@ const Page = async ({params}: {params: {id: string}}) => {
                     parentId={postItem.parentId}
                     content={postItem.text}
                     author={postItem.author}
+                    likes={post.likes}
                     community={postItem.community}
                     createdAt={postItem.createdAt}
                     comments={postItem.children}

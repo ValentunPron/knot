@@ -64,7 +64,7 @@ export async function fetchUserPost(userId: string) {
                     populate: {
                         path: "author",
                         model: User,
-                        select: "name image id",
+                        select: "id name image",
                     },
                 },
             });

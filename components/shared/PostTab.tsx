@@ -29,6 +29,7 @@ const PostTab = async ({currentUserId, accoundId, accountType}: Props) => {
                         ? { name: posts.name, image: posts.image, id: posts.id }
                         : { name: post.author.name, image: post.author.image, id: post.author.id}
                     }
+                    likes={post.likes}
                     community={post.community}
                     createdAt={post.createdAt}
                     comments={post.children}

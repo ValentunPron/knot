@@ -36,6 +36,7 @@ export async function fetchPost(pageNumber = 1, pageSize = 20) {
 
         const skipAmout = (pageNumber - 1) * pageSize;
 
+        // $in: [null, undefined] - забирає коментарі
         const postQuery = Post.find({parentId: { $in: [null, undefined]}})
             .sort({createdAt: 'desc'})
             .skip(skipAmout)

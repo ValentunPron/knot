@@ -58,28 +58,31 @@ const Comment = ({postId, currentUserImage, currentUserId}: Props) => {
                     control={form.control}
                     name="post"
                     render={({ field }) => (
-                    <FormItem className='flex gap-2 items-center w-full'>
-                        <FormLabel>
-                           <Image 
-                                src={currentUserImage}
-                                alt='user avatar'
-                                width={48}
-                                height={48}
-                                className="rounded-full object-cover h-[48px]"
-                           />
-                        </FormLabel>
-                        <FormControl className='border-none bg-transparent'>
-                            <Input 
-                                type='text'
-                                placeholder='Коментувати...'
-                                className='no-focus text-light-1 outline-none'
-                                {...field}
+                    <FormItem className='w-full'>
+                        <div className='flex gap-2 items-center w-full'>
+                            <FormLabel>
+                            <Image 
+                                    src={currentUserImage}
+                                    alt='user avatar'
+                                    width={48}
+                                    height={48}
+                                    className="rounded-full object-cover h-[48px]"
                             />
-                        </FormControl>
-                        
-                        <FormLabel className={`text-light-2 ${valuesPost > 1000 ? 'text-red-500' : ''}`}>
-                            <p>{valuesPost}/1000</p>
-                        </FormLabel>
+                            </FormLabel>
+                            <FormControl className='border-none bg-transparent'>
+                                <Input 
+                                    type='text'
+                                    placeholder='Коментувати...'
+                                    className='no-focus text-light-1 outline-none'
+                                    {...field}
+                                />
+                            </FormControl>
+                            
+                            <FormLabel className={`text-light-2 ${valuesPost > 300 ? 'text-red-500' : ''}`}>
+                                <p>{valuesPost}/300</p>
+                            </FormLabel>
+                        </div>
+                        <FormMessage />
                     </FormItem>
                     )}
                 />
