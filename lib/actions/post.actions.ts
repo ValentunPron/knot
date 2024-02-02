@@ -6,6 +6,7 @@ import { connectToDB } from "../mongoose";
 
 import Post from "../models/post.model";
 import User from "../models/user.model";
+import Community from "../models/community.model";
 
 interface Params {
     text: string,
@@ -18,11 +19,24 @@ export async function createPost({text, author, communityId, path}: Params) {
     try {
         connectToDB();
 
-        const post = await Post.create({text, author, community: null});
+        const communityIdObject = await Community.findOne(
+            { id: communityId },
+            { _id: 1 }
+        );
+
+        console.log('communityObject', communityIdObject);
+
+        const post = await Post.create({text, author, community: communityIdObject});
     
         await User.findByIdAndUpdate(author, {
             $push: { posts: post._id }
         });
+
+        if (communityIdObject) {
+            await Community.findByIdAndUpdate(communityIdObject, {
+              $push: { post: post._id },
+            });
+        }
     
         revalidatePath(path);
     } catch (error: any) {
@@ -41,7 +55,14 @@ export async function fetchPost(pageNumber = 1, pageSize = 20) {
             .sort({createdAt: 'desc'})
             .skip(skipAmout)
             .limit(pageSize)
-            .populate({path: 'author', model: 'User'})
+            .populate({
+                path: 'author', 
+                model: User
+            })
+            .populate({
+                path: "community",
+                model: Community,
+            })
             .populate({
                 path: 'children',
                 populate: {
@@ -72,6 +93,11 @@ export async function fetchPostById(id: string) {
                 path: 'author',
                 model: User,
                 select: '_id id name image',
+            })
+            .populate({
+                path: "community",
+                model: Community,
+                select: "_id id name image",
             })
             .populate({
                 path: 'children',

@@ -20,10 +20,12 @@ import { Textarea } from '../ui/textarea';
 import { PostValidation } from '@/lib/validations/post';
 import { textCreatedPost } from '@/constants';
 import { createPost } from '@/lib/actions/post.actions';
+import { useOrganization } from '@clerk/nextjs';
 
 function NewPost({userId}: {userId: string}) {
     const router = useRouter();
     const pathname = usePathname();
+    const { organization } = useOrganization();
 
     const [messagePost, setMessagePost] = React.useState('');
     const [valuesPost, setValuesPost] = React.useState(0);
@@ -44,7 +46,7 @@ function NewPost({userId}: {userId: string}) {
         await createPost({ 
             text: values.post,
             author: userId,
-            communityId: null,
+            communityId: organization ? organization.id : null,
             path: pathname,
         
         });
@@ -79,7 +81,7 @@ function NewPost({userId}: {userId: string}) {
                     </FormItem>
                     )}
                 />
-                <Button type="submit" className='.comment-form_btn'>
+                <Button type="submit" className='comment-form_btn'>
                     Створити пост
                 </Button>
             </form>

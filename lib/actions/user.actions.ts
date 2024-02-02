@@ -1,10 +1,12 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import User from "../models/user.model";
 import { connectToDB } from "../mongoose";
-import Post from "../models/post.model";
 import { FilterQuery, SortOrder } from "mongoose";
+
+import User from "../models/user.model";
+import Post from "../models/post.model";
+import Community from "../models/community.model";
 
 interface Params {
     userId: string,
@@ -43,7 +45,10 @@ export async function fecthUser(userId: string) {
     try {
         connectToDB();
 
-        return await User.findOne({id: userId})
+        return await User.findOne({ id: userId }).populate({
+            path: "communities",
+            model: Community,
+          });
     } catch (error: any) {
         throw new Error(`Помилка з полученням даних про користувача ${error.message}`)
     }
@@ -58,15 +63,22 @@ export async function fetchUserPost(userId: string) {
                 path: 'posts',
                 model: Post,
                 options: { sort: { createdAt: -1 }},
-                populate: {
-                    path: "children",
-                    model: Post,
-                    populate: {
-                        path: "author",
-                        model: User,
-                        select: "id name image",
+                populate: [
+                    {
+                        path: "community",
+                        model: Community,
+                        select: "name id image _id", // Select the "name" and "_id" fields from the "Community" model
                     },
-                },
+                    {
+                        path: "children",
+                        model: Post,
+                        populate: {
+                            path: "author",
+                            model: User,
+                            select: "id name image",
+                        },
+                    }
+                ],
             });
 
             return posts
