@@ -24,7 +24,7 @@ export async function createPost({text, author, communityId, path}: Params) {
             { _id: 1 }
         );
 
-        console.log('communityObject', communityIdObject);
+        console.log('communityObject', communityIdObject)
 
         const post = await Post.create({text, author, community: communityIdObject});
     

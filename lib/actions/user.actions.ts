@@ -45,10 +45,12 @@ export async function fecthUser(userId: string) {
     try {
         connectToDB();
 
-        return await User.findOne({ id: userId }).populate({
+        const test = await User.findOne({ id: userId }).populate({
             path: "communities",
             model: Community,
-          });
+        });
+
+        return test;
     } catch (error: any) {
         throw new Error(`Помилка з полученням даних про користувача ${error.message}`)
     }
