@@ -34,6 +34,7 @@ interface Props {
     comments: {
         author: {
             image: string
+            name: string,
         }
     }[],
     isComment?: boolean,
@@ -52,6 +53,8 @@ const PostCard = ({
     isComment
 }: Props) => {
     const date = format(new Date(createdAt),"HH:mm - dd MMMM yyyy", {locale: uk});
+
+    console.log(comments);
 
     return (
         <article className={`flex w-full flex-col rounded-xl ${isComment ? 'px-0 xs:px-6 mt-1' : 'bg-dark-2 p-6'}`}>
@@ -120,6 +123,32 @@ const PostCard = ({
                     </div>
                 </div>
             </div>
+            {
+                !isComment && comments && comments.length > 0 && (
+                    <div className="mt-4 flex items-center">
+                        {
+                            !isComment && comments && comments.length > 0 && 
+                            comments.map((comment, index) => {
+                                if(index <= 2) {
+                                    return (
+                                        <Image
+                                        key={index}
+                                        src={comment.author.image}
+                                        alt={`user_${index}`}
+                                        width={28}
+                                        height={28}
+                                        className={`${
+                                        index !== 0 && "-ml-3"
+                                        } rounded-full object-cover`}
+                                    />
+                                    )
+                                }
+                            })
+                        }
+                        <span className="ml-2 text-subtle-medium text-gray-1">{comments.length} Коментар'я</span>
+                    </div>
+                )
+            }
             {
                 !isComment && (
                     <p className="mt-4 text-subtle-medium text-gray-1">

@@ -23,7 +23,7 @@ export const sidebarLinks = [
     {
       imgURL: heart,
       route: "/activity",
-      label: "Діяльнсіть",
+      label: "Активність",
     },
     {
       imgURL: create,

@@ -3,8 +3,9 @@ import { redirect } from "next/navigation"
 
 import { fecthUser, fetchUsers } from "@/lib/actions/user.actions";
 import UserCard from "@/components/cards/UserCard";
+import SearchBar from "@/components/shared/SearchBar";
 
-const Page = async () => {
+const Page = async ({searchParams}: {searchParams: {[key: string]: string | undefined}}) => {
     const user = await currentUser();
 
     if(!user) {
@@ -19,7 +20,7 @@ const Page = async () => {
 
     const result = await fetchUsers({
         userId: userInfo.id,
-        searchString: '',
+        searchString: searchParams.search,
         pageNumber: 1,
         pageSize: 12
     });
@@ -32,6 +33,8 @@ const Page = async () => {
     return (
         <section>
             <h1 className="head-text mb-10">Пошук</h1>
+
+            <SearchBar routeType="search"/>
 
             <div className="mt-14 flex flex-col gap-8">
                 {
