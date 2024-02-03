@@ -42,7 +42,7 @@ const Page = async () => {
                             key={person.id}
                             id={person.id}
                             name={person.name}
-                            usernmae={person.username}
+                            username={person.username}
                             imgUrl={person.image}
                             personType='User'
                         />

@@ -24,8 +24,6 @@ export async function createPost({text, author, communityId, path}: Params) {
             { _id: 1 }
         );
 
-        console.log('communityObject', communityIdObject)
-
         const post = await Post.create({text, author, community: communityIdObject});
     
         await User.findByIdAndUpdate(author, {
@@ -34,7 +32,7 @@ export async function createPost({text, author, communityId, path}: Params) {
 
         if (communityIdObject) {
             await Community.findByIdAndUpdate(communityIdObject, {
-              $push: { post: post._id },
+              $push: { posts: post._id },
             });
         }
     

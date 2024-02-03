@@ -7,6 +7,7 @@ import user from '@/assets/user.svg';
 import reply from '@/assets/reply.svg';
 import members from '@/assets/members.svg';
 import tag from '@/assets/tag.svg';
+import request from '@/assets/request.svg'
 
 export const sidebarLinks = [
     {
@@ -48,9 +49,9 @@ export const sidebarLinks = [
   ];
   
   export const communityTabs = [
-    { value: "threads", label: "Threads", icon: "/assets/reply.svg" },
-    { value: "members", label: "Members", icon: "/assets/members.svg" },
-    { value: "requests", label: "Requests", icon: "/assets/request.svg" },
+    { value: "posts", label: "Posts", icon: reply },
+    { value: "members", label: "Members", icon: members },
+    { value: "requests", label: "Requests", icon: request },
   ];
 
   export const textCreatedPost = ['Як пройшов день?', 'Що ви думайте?', 'Розкажіть цікаву історію?', 'Що сьогодні нового?', 'Розкажіть про вчорашній день?', 'Напишіть текст.',  'Які у вас плани на завтра?',  'Напишіть про нову книгу, яку прочитали', 'Напишіть про новий фільм, який переглянули', 'Напишіть про нову відеоігру, яку недавно пограли', 'Розкажіть історію з минулого', 'Напишіть пост про улюблену їжу', 'Що відбулось цікавого за тиждень?', 'Що ви нового дізналися сьогодні?', 'Як вам відеогра Minecraft', 'Які ваші думки про останні події?', 'Як пройшов вихідний?', 'Що вас найбільше вразило за останній тиждень?', 'Розкажіть про ваш останній подорож?', 'Які новини вас здивували найбільше?', 'Що ви вчора робили?', 'Які у вас хобі та захоплення?', 

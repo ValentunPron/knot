@@ -7,7 +7,7 @@ import heart from "@/assets/heart-gray.svg";
 import reply from "@/assets/reply.svg";
 import repost from "@/assets/repost.svg";
 import share from "@/assets/share.svg";
-import { Button } from "../ui/button";
+
 
 
 interface Props {
@@ -51,7 +51,7 @@ const PostCard = ({
     comments,
     isComment
 }: Props) => {
-    const date = format(new Date(),"dd MMMM", {locale: uk});
+    const date = format(new Date(createdAt),"HH:mm - dd MMMM yyyy", {locale: uk});
 
     return (
         <article className={`flex w-full flex-col rounded-xl ${isComment ? 'px-0 xs:px-6 mt-1' : 'bg-dark-2 p-6'}`}>
@@ -70,9 +70,25 @@ const PostCard = ({
                         <div className="thread-card_bar" />
                     </div>
                     <div className="flex w-full flex-col">
-                        <Link href={`/profile/${author.id}`} className="w-fit">
-                            <h4 className="cursor-pointer text-base-semibold text-light-2">{author.name}</h4>
-                        </Link>
+                        <div className="flex gap-3 items-center">
+                            <Link href={`/profile/${author.id}`} className="w-fit">
+                                <h4 className="cursor-pointer text-base-semibold text-light-2">{author.name}</h4>
+                            </Link>
+                            {
+                                !isComment && community && (
+                                    <Link href={`/communities/${community.id}`} className="flex items-center">
+                                        <span className="text-subtle-medium text-gray-1">| {community.name} Community</span>
+                                        <Image 
+                                            src={community.image}
+                                            alt={community.name}
+                                            width={20}
+                                            height={20}
+                                            className="rounded-full ml-1 object-cover w-[20px] h-[20px]"
+                                        />
+                                    </Link>
+                                )
+                            }
+                        </div>
 
                         <p className="mt-2 text-small-regular text-light-2">{content}</p>
 
@@ -88,38 +104,29 @@ const PostCard = ({
 
                             {
                                 isComment && comments.length > 0 && (
-                                    <Link href={`/post/${id}`}>
+                                <Link href={`/post/${id}`}>
                                         <p className='mt-1 text-subtle-medium text-gray-1'>{comments.length} відповіді</p>
-                                    </Link>
+                                </Link>
+                                )
+                            }
+                            {
+                                isComment && (
+                                    <p className="mt-4 text-subtle-medium text-gray-1">
+                                        {date}
+                                    </p>
                                 )
                             }
                         </div>
                     </div>
                 </div>
-                {/* <span className="mt-4 text-light-2 text-small-medium">
-                    {date}
-                </span> */}
-                {/* {
-                    console.log('ISCOMMENT', isComment, 'AND CUM', community)
-                } */}
-                { 
-                    !isComment && community && (
-                        <Link href={`communities/${community.id}`} className="mt-5 flex items-center">
-                            <p className="text-subtle-medium text-gray-1">
-                                {date} - {community.name} Community
-                            </p>
-
-                            <Image 
-                                src={community.image}
-                                alt={community.name}
-                                width={14}
-                                height={14}
-                                className="rounded-full ml-1 object-cover"
-                            />
-                        </Link>
-                    )
-                }
             </div>
+            {
+                !isComment && (
+                    <p className="mt-4 text-subtle-medium text-gray-1">
+                        {date}
+                     </p>
+                )
+            }
         </article>
     )
 }

@@ -3,10 +3,11 @@ import { redirect } from "next/navigation"
 import Image from "next/image";
 
 import ProfileHeader from "@/components/shared/ProfileHeader";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { profileTabs } from "@/constants";
 import { fecthUser } from "@/lib/actions/user.actions";
 import PostTab from "@/components/shared/PostTab";
+import React from "react";
 
 const Page = async ({params}: { params: {id: string}}) => {
     const user = await currentUser();
@@ -21,6 +22,7 @@ const Page = async ({params}: { params: {id: string}}) => {
         redirect('/onboarding');
     }
     
+    
 
     return (
         <section>
@@ -33,7 +35,7 @@ const Page = async ({params}: { params: {id: string}}) => {
                 bio={userInfo.bio}
             />
 
-            <Tabs defaultValue='post' className="w-full">
+            <Tabs defaultValue='posts' className="w-full">
                 <TabsList className="tab">
                     {
                         profileTabs.map((tab) => (
@@ -59,11 +61,13 @@ const Page = async ({params}: { params: {id: string}}) => {
                     }
                 </TabsList>
 
-                <PostTab 
-                    currentUserId={user.id}
-                    accoundId={userInfo.id}
-                    accountType='User'
-                />
+                <TabsContent value="posts">
+                    <PostTab 
+                        currentUserId={user.id}
+                        accoundId={userInfo.id}
+                        accountType='User'
+                    />
+                </TabsContent>
             </Tabs>
         </section>
     )
