@@ -15,11 +15,10 @@ export default async function Home() {
 
   const userInfo = await fecthUser(user.id);
   
+  
   if(!userInfo?.onboarded) {
     redirect('/onboarding');
   }
-
-  console.log(userInfo.liked.includes('65c1e1b37f57453d321fbcb2'));
 
   return (
     <>
@@ -36,7 +35,7 @@ export default async function Home() {
                   <PostCard 
                     key={post._id}
                     id={post._id}
-                    currentUserId={user?.id || ""}
+                    currentUserId={userInfo.id || ""}
                     parentId={post.parentId}
                     content={post.text}
                     author={post.author}

@@ -7,7 +7,6 @@ import { connectToDB } from "../mongoose";
 import Post from "../models/post.model";
 import User from "../models/user.model";
 import Community from "../models/community.model";
-import { fetchUsers } from "./user.actions";
 
 interface Params {
     text: string,
@@ -63,13 +62,18 @@ export async function fetchPost(pageNumber = 1, pageSize = 20) {
                 model: Community,
             })
             .populate({
+                path: 'likes',
+                model: User,
+                select: "_id id name username image"
+            })
+            .populate({
                 path: 'children',
                 populate: {
                     path: 'author',
                     model: User,
                     select: "_id name parentId image"
                 }
-            });
+            })
 
             const totalPostCount = await Post.countDocuments({parentId: { $in: [null, undefined]}});
 
@@ -97,6 +101,11 @@ export async function fetchPostById(id: string) {
                 path: "community",
                 model: Community,
                 select: "_id id name image",
+            })
+            .populate({
+                path: 'likes',
+                model: User,
+                select: '_id id name username image'
             })
             .populate({
                 path: 'children',
@@ -166,8 +175,6 @@ export async function deletePostId({authorId, postId}: {authorId: string, postId
         connectToDB();
 
         const posts = await Post.findById(postId);
-
-        console.log(posts);
     } catch (error: any) {;
         throw new Error(`Не вдалося видалити пост ${error.message}`);
     }

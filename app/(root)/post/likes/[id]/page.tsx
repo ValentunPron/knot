@@ -1,4 +1,5 @@
 import PostCard from "@/components/cards/PostCard";
+import UserCard from "@/components/cards/UserCard";
 import Comment from "@/components/forms/Comment";
 import { fetchPostById } from "@/lib/actions/post.actions";
 import { fecthUser } from "@/lib/actions/user.actions";
@@ -39,7 +40,6 @@ const Page = async ({params}: {params: {id: string}}) => {
                 community={post.community}
                 createdAt={post.createdAt}
                 comments={post.children}
-                isFullPost={true}
             />
            </div>
 
@@ -51,23 +51,18 @@ const Page = async ({params}: {params: {id: string}}) => {
                 />
            </div>
 
-           <div className="mt-10">
-            {post.children.map((postItem: any) => (
-                <PostCard 
-                    key={postItem._id}
-                    id={postItem._id}
-                    currentUserId={userInfo?.id || ""}
-                    parentId={postItem.parentId}
-                    content={postItem.text}
-                    author={postItem.author}
-                    likes={postItem.likes}
-                    likedStatus={userInfo.liked.includes(postItem._id)}
-                    community={postItem.community}
-                    createdAt={postItem.createdAt}
-                    comments={postItem.children}
-                    isComment
+           <div className="flex flex-col gap-6 mt-10">
+            {post.likes.map((authorLike: any) => (
+                <UserCard 
+                    key={authorLike.id}
+                    id={authorLike.id}
+                    name={authorLike.name}
+                    username={authorLike.username}
+                    imgUrl={authorLike.image}
+                    personType='User'
                 />
-            ))}
+            )
+            )}
            </div>
         </section>
     )

@@ -5,9 +5,10 @@ import Image from "next/image";
 import ProfileHeader from "@/components/shared/ProfileHeader";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { profileTabs } from "@/constants";
-import { fecthUser } from "@/lib/actions/user.actions";
+import { fecthUser, fetchUserPost, fetchUserReplies } from "@/lib/actions/user.actions";
 import PostTab from "@/components/shared/PostTab";
 import React from "react";
+import LikedTab from "@/components/shared/LikedTab";
 
 const Page = async ({params}: { params: {id: string}}) => {
     const user = await currentUser();
@@ -18,10 +19,12 @@ const Page = async ({params}: { params: {id: string}}) => {
 
     const userInfo = await fecthUser(params.id);
 
+    const postUser = await fetchUserPost({userId: params.id});
+    const repliesUser = await fetchUserReplies({userId: params.id});
+
     if(!userInfo?.onboarded) {
         redirect('/onboarding');
     }
-    
     
 
     return (
@@ -52,7 +55,15 @@ const Page = async ({params}: { params: {id: string}}) => {
                                 {
                                     tab.label === "Posts" && (
                                         <p className="ml-1 rounded-sm bg-light-4 px-2 py-1 !text-tiny-medium text-light-2">
-                                            {userInfo?.posts?.length}
+                                            {postUser.posts.length}
+                                        </p>
+                                    )
+                                }
+
+                                {
+                                    tab.label === "Replies" && (
+                                        <p className="ml-1 rounded-sm bg-light-4 px-2 py-1 !text-tiny-medium text-light-2">
+                                            {repliesUser.posts.length}
                                         </p>
                                     )
                                 }
@@ -63,6 +74,23 @@ const Page = async ({params}: { params: {id: string}}) => {
 
                 <TabsContent value="posts">
                     <PostTab 
+                        currentUserId={user.id}
+                        accoundId={userInfo.id}
+                        accountType='User'
+                    />
+                </TabsContent>
+
+                <TabsContent value="replies">
+                    <PostTab 
+                        currentUserId={user.id}
+                        accoundId={userInfo.id}
+                        accountType='User'
+                        replies={true}
+                    />
+                </TabsContent>
+
+                <TabsContent value="liked">
+                    <LikedTab 
                         currentUserId={user.id}
                         accoundId={userInfo.id}
                         accountType='User'

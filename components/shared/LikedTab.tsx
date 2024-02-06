@@ -1,4 +1,4 @@
-import { fecthUser, fetchUserPost, fetchUserReplies } from "@/lib/actions/user.actions";
+import { fecthUser, fetchLikedPost, fetchUserPost } from "@/lib/actions/user.actions";
 import { redirect } from "next/navigation";
 import PostCard from "../cards/PostCard";
 import { fetchCommunityPosts } from "@/lib/actions/community.actions";
@@ -7,18 +7,11 @@ interface Props {
     currentUserId: string,
     accoundId: string,
     accountType: string,
-    replies?: boolean,
 }
 
-const PostTab = async ({currentUserId, accoundId, accountType, replies = false}: Props) => {
+const LikedTab = async ({currentUserId, accoundId, accountType}: Props) => {
     
-    let posts: any;
-
-    if (accountType === 'Community') {
-        posts = await fetchCommunityPosts(accoundId);
-    } else {
-        posts = replies ? await fetchUserReplies({userId: accoundId}) : await fetchUserPost({userId: accoundId});
-    }
+    const posts = await fetchLikedPost(accoundId);
 
     if(!posts) {
         redirect('/');
@@ -28,7 +21,7 @@ const PostTab = async ({currentUserId, accoundId, accountType, replies = false}:
 
     return (
         <section className="mt-9 flex flex-col gap-10">
-            {posts.posts.map((post: any) => (
+            {posts.liked.map((post: any) => (
                 <PostCard 
                     key={post._id}
                     id={post._id}
@@ -36,9 +29,7 @@ const PostTab = async ({currentUserId, accoundId, accountType, replies = false}:
                     parentId={post.parentId}
                     content={post.text}
                     author={
-                        accountType === 'User' 
-                        ? { name: posts.name, image: posts.image, id: posts.id }
-                        : { name: post.author.name, image: post.author.image, id: post.author.id}
+                        { name: post.author.name, image: post.author.image, id: post.author.id}
                     }
                     likes={post.likes}
                     likedStatus={userInfo.liked.includes(post._id)}
@@ -51,4 +42,4 @@ const PostTab = async ({currentUserId, accoundId, accountType, replies = false}:
     )
 }
 
-export default PostTab;
+export default LikedTab;

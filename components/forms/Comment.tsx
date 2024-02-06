@@ -51,7 +51,7 @@ const Comment = ({postId, currentUserImage, currentUserId}: Props) => {
         <Form {...form}>
             <form 
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="comment-form"
+                className="comment-form flex max-sm:flex-col"
                 onChange={(e: any) => setValuesPost(e.target.value.length)}
             >
                 <FormField

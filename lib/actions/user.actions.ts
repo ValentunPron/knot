@@ -45,61 +45,26 @@ export async function fecthUser(userId: string) {
     try {
         connectToDB();
 
-        const test = await User.findOne({ id: userId }).populate({
+        const user = await User.findOne({ id: userId }).populate({
             path: "communities",
             model: Community,
         });
 
-        return test;
+        return user;
     } catch (error: any) {
         throw new Error(`Помилка з полученням даних про користувача ${error.message}`)
     }
 }
 
-export async function fetchUserPost(userId: string) {
-    try {
-        connectToDB();
-
-        const posts = await User.findOne({id: userId})
-            .populate({
-                path: 'posts',
-                model: Post,
-                options: { sort: { createdAt: -1 }},
-                populate: [
-                    {
-                        path: "community",
-                        model: Community,
-                        select: "name id image _id", // Select the "name" and "_id" fields from the "Community" model
-                    },
-                    {
-                        path: "children",
-                        model: Post,
-                        populate: {
-                            path: "author",
-                            model: User,
-                            select: "id name image",
-                        },
-                    }
-                ],
-            });
-
-            return posts
-    } catch (error: any) {
-        throw new Error(`Невдалося загрузити пости користувача: ${error.message}`);
-    }
-    
-}
-
 interface IUsers {
     userId: string,
-    userIds?: string[],
     searchString?: string,
     pageNumber?: number,
     pageSize?: number,
     sortBy?: SortOrder
 }
 
-export const fetchUsers = async ({userId, userIds, searchString = '', pageNumber = 1, pageSize = 12, sortBy='desc'}: IUsers) => {
+export const fetchUsers = async ({userId, searchString = '', pageNumber = 1, pageSize = 12, sortBy='desc'}: IUsers) => {
     try {
         connectToDB();
 
@@ -108,11 +73,7 @@ export const fetchUsers = async ({userId, userIds, searchString = '', pageNumber
         const regex = new RegExp(searchString, 'i');
 
         const query: FilterQuery<typeof User> = {
-            id: {$ne: userId}
-        }
-
-        if (userIds) {
-            query._id = { $in: userIds };
+            id: {$ne: userId},
         }
 
         if(searchString.trim() !== '') {
@@ -165,4 +126,128 @@ export const getActivity = async (userId: string) => {
     } catch (error: any) {
         throw new Error(`Не вдалося загрузити активність користувача: ${error.message}`);
     }
+}
+
+export async function fetchUserPost({userId}: {userId: string}) {
+    try {
+        connectToDB();
+
+        const posts = await User.findOne({id: userId})
+            .populate({
+                path: 'posts',
+                model: Post,
+                match: { parentId: { $exists: false } },
+                options: { sort: { createdAt: -1 }},
+                populate: [
+                    {
+                        path: "community",
+                        model: Community,
+                        select: "name id image _id", // Select the "name" and "_id" fields from the "Community" model
+                    },
+                    {
+                        path: 'likes',
+                        model: User,
+                        select: '_id id name username image'
+                    },
+                    {
+                        path: "children",
+                        model: Post,
+                        populate: {
+                            path: "author",
+                            model: User,
+                            select: "id name image",
+                        },
+                    }
+                ],
+            });
+
+            return posts
+    } catch (error: any) {
+        throw new Error(`Невдалося загрузити пости користувача: ${error.message}`);
+    }
+    
+}
+
+export async function fetchUserReplies({userId}: {userId: string}) {
+    try {
+        connectToDB();
+
+        const posts = await User.findOne({id: userId})
+            .populate({
+                path: 'posts',
+                model: Post,
+                match: { parentId: { $exists: true } },
+                options: { sort: { createdAt: -1 }},
+                populate: [
+                    {
+                        path: "community",
+                        model: Community,
+                        select: "name id image _id", // Select the "name" and "_id" fields from the "Community" model
+                    },
+                    {
+                        path: 'likes',
+                        model: User,
+                        select: '_id id name username image'
+                    },
+                    {
+                        path: "children",
+                        model: Post,
+                        populate: {
+                            path: "author",
+                            model: User,
+                            select: "id name image",
+                        },
+                    }
+                ],
+            });
+
+            return posts
+    } catch (error: any) {
+        throw new Error(`Невдалося загрузити пости користувача: ${error.message}`);
+    }
+    
+}
+
+export async function fetchLikedPost(userId: string) {
+    try {
+        connectToDB();
+
+        const posts = await User.findOne({id: userId})
+            .populate({
+                path: 'liked',
+                model: Post,
+                options: { sort: { createdAt: -1 }},
+                populate: [
+                    {
+                        path: "community",
+                        model: Community,
+                        select: "name id image _id", // Select the "name" and "_id" fields from the "Community" model
+                    },
+                    {
+                        path: 'likes',
+                        model: User,
+                        select: '_id id name username image'
+                    },
+                    {
+                        path: "author",
+                        model: User,
+                        select: "id name image",
+                    },
+                    {
+                        path: "children",
+                        model: Post,
+                        populate: {
+                            path: "author",
+                            model: User,
+                            select: "id name image",
+                        },
+                    }
+                ],
+            });
+
+            return posts
+    } catch (error: any) {
+        throw new Error(`Невдалося загрузити пости користувача: ${error.message}`);
+    }
+    
 }

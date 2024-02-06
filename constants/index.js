@@ -1,6 +1,7 @@
 import home from '@/assets/home.svg';
 import search from '@/assets/search.svg';
 import heart from '@/assets/heart.svg';
+import heartGray from '@/assets/heart-gray.svg';
 import create from '@/assets/create.svg';
 import community from '@/assets/community.svg';
 import user from '@/assets/user.svg';
@@ -45,7 +46,7 @@ export const sidebarLinks = [
   export const profileTabs = [
     { value: "posts", label: "Posts", icon: reply },
     { value: "replies", label: "Replies", icon: members },
-    { value: "tagged", label: "Tagged", icon: tag },
+    { value: "liked", label: "Liked", icon: heartGray },
   ];
   
   export const communityTabs = [
