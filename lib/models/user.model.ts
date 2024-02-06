@@ -22,6 +22,12 @@ const userSchema = new mongoose.Schema({
             ref: 'Posts'
         }
     ],
+    liked: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Posts',
+        }
+    ],
     onboarded: {
         type: Boolean,
         default: false,

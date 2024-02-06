@@ -1,10 +1,25 @@
 import PostCard from "@/components/cards/PostCard";
 import { fetchPost } from "@/lib/actions/post.actions"
+import { fecthUser } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
+import React from "react";
 
 export default async function Home() {
   const posts = await fetchPost();
   const user = await currentUser();
+
+  if(!user) {
+    redirect('/sing-in');
+  }
+
+  const userInfo = await fecthUser(user.id);
+  
+  if(!userInfo?.onboarded) {
+    redirect('/onboarding');
+  }
+
+  console.log(userInfo.liked.includes('65c1e1b37f57453d321fbcb2'));
 
   return (
     <>
@@ -26,6 +41,7 @@ export default async function Home() {
                     content={post.text}
                     author={post.author}
                     likes={post.likes}
+                    likedStatus={userInfo.liked.includes(post._id)}
                     community={post.community}
                     createdAt={post.createdAt}
                     comments={post.children}

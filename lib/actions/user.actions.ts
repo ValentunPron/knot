@@ -92,13 +92,14 @@ export async function fetchUserPost(userId: string) {
 
 interface IUsers {
     userId: string,
+    userIds?: string[],
     searchString?: string,
     pageNumber?: number,
     pageSize?: number,
     sortBy?: SortOrder
 }
 
-export const fetchUsers = async ({userId, searchString = '', pageNumber = 1, pageSize = 12, sortBy='desc'}: IUsers) => {
+export const fetchUsers = async ({userId, userIds, searchString = '', pageNumber = 1, pageSize = 12, sortBy='desc'}: IUsers) => {
     try {
         connectToDB();
 
@@ -108,6 +109,10 @@ export const fetchUsers = async ({userId, searchString = '', pageNumber = 1, pag
 
         const query: FilterQuery<typeof User> = {
             id: {$ne: userId}
+        }
+
+        if (userIds) {
+            query._id = { $in: userIds };
         }
 
         if(searchString.trim() !== '') {

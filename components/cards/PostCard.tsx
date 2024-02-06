@@ -7,6 +7,8 @@ import heart from "@/assets/heart-gray.svg";
 import reply from "@/assets/reply.svg";
 import repost from "@/assets/repost.svg";
 import share from "@/assets/share.svg";
+import DeletePost from "../atoms/DeletePost";
+import LikePost from "../atoms/LikePost";
 
 
 
@@ -30,6 +32,7 @@ interface Props {
             image: string
         }
     }[],
+    likedStatus: boolean,
     createdAt:  string,
     comments: {
         author: {
@@ -47,14 +50,13 @@ const PostCard = ({
     content,
     author,
     likes,
+    likedStatus,
     community,
     createdAt,
     comments,
-    isComment
+    isComment,
 }: Props) => {
     const date = format(new Date(createdAt),"HH:mm - dd MMMM yyyy", {locale: uk});
-
-    console.log(comments);
 
     return (
         <article className={`flex w-full flex-col rounded-xl ${isComment ? 'px-0 xs:px-6 mt-1' : 'bg-dark-2 p-6'}`}>
@@ -97,7 +99,11 @@ const PostCard = ({
 
                         <div className={`${isComment && 'mb-7'} mt-5 flex-col gap-3`}>
                             <div className="flex gap-4">
-                                <Image src={heart} alt="heart" width={26} height={26} className="cursor-pointer object-contain"/>
+                                <LikePost 
+                                    userId={currentUserId}
+                                    likedStatus={likedStatus}
+                                    postId={id}
+                                />
                                 <Link href={`/post/${id}`}>
                                     <Image src={reply} alt="reply" width={26} height={26} className="cursor-pointer object-contain"/>
                                 </Link>
@@ -122,10 +128,20 @@ const PostCard = ({
                         </div>
                     </div>
                 </div>
+                <div>
+                    <DeletePost 
+                        userId={currentUserId}
+                        authorId={author.id}
+                        postId={id}
+                    />
+                </div>
             </div>
             {
                 !isComment && comments && comments.length > 0 && (
-                    <div className="mt-4 flex items-center">
+                    <Link
+                        href={`post/${id}`} 
+                        className="mt-4 flex items-center"
+                    >
                         {
                             !isComment && comments && comments.length > 0 && 
                             comments.map((comment, index) => {
@@ -145,8 +161,8 @@ const PostCard = ({
                                 }
                             })
                         }
-                        <span className="ml-2 text-subtle-medium text-gray-1">{comments.length} Коментар'я</span>
-                    </div>
+                        <span className="ml-2 text-subtle-medium text-gray-1">{comments.length} Коментарі</span>
+                    </Link>
                 )
             }
             {

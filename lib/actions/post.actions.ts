@@ -7,6 +7,7 @@ import { connectToDB } from "../mongoose";
 import Post from "../models/post.model";
 import User from "../models/user.model";
 import Community from "../models/community.model";
+import { fetchUsers } from "./user.actions";
 
 interface Params {
     text: string,
@@ -158,4 +159,49 @@ export async function addCommentToPost(
     } catch (error: any) {;
       throw new Error(`Не вдалося добавити коментарій ${error.message}`);
     }
-  }
+}
+
+export async function deletePostId({authorId, postId}: {authorId: string, postId: string}) {
+    try {
+        connectToDB();
+
+        const posts = await Post.findById(postId);
+
+        console.log(posts);
+    } catch (error: any) {;
+        throw new Error(`Не вдалося видалити пост ${error.message}`);
+    }
+}
+
+// export async function ({posts, userId}: {posts: any, userId: string}) {
+//     try {
+//         posts.
+//     } catch (error: any) {;
+//         throw new Error(`Не вдалося добавити лайк ${error.message}`);
+//     }
+// }
+
+export async function likedPost({userId, postId}: {userId: string, postId: string}) {
+    try {
+        connectToDB();
+
+        const post = await Post.findById(postId);
+        const user = await User.findOne({id: userId});
+
+        const status = await (post.likes.includes(user._id) && user.liked.includes(post._id));
+
+        if(status) {
+            post.likes.pull(user._id);
+            user.liked.pull(post._id);
+        } else {
+            post.likes.push(user._id);
+            user.liked.push(post._id);
+        }
+
+        await user.save();
+        await post.save();
+
+    } catch (error: any) {
+        throw new Error(`Не вдалося добавити лайк ${error.message}`);
+      }
+}
