@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { followUser } from "@/lib/actions/user.actions";
+import { useRouter } from "next/navigation";
 
 interface Props {
     accountId: string,
@@ -12,13 +13,19 @@ interface Props {
     name: string,
     imgUrl: string,
     bio: string,
+    followers: number,
+    following: number,
+    checkFollower: boolean,
     type?: 'User' | 'Community'
 }
 
-const ProfileHeader = ({accountId, authUserId, username, name, imgUrl, bio, type}: Props) => {
+const ProfileHeader = ({accountId, authUserId, username, name, imgUrl, bio, followers, following, checkFollower, type}: Props) => {
+
+    const router = useRouter();
 
     const toggleFollowUser = async () => {
         await followUser({userId: accountId, currentUserId: authUserId});
+        router.refresh();
     }
 
     return (
@@ -39,18 +46,29 @@ const ProfileHeader = ({accountId, authUserId, username, name, imgUrl, bio, type
                             <h2 className="text-left text-heading3-bold text-light-1">{name}</h2>
                             <p className="text-base-medium text-gray-1">@{username}</p>
                         </div>
-
-                        <Button className='user-card_btn hover:opacity-75 flex sm:hidden ml-5 py-2.5 px-5 text-[16px]' onClick={() => toggleFollowUser()}>Стежити</Button>
+                        {
+                            accountId !== authUserId
+                            && 
+                            <Button className='user-card_btn hover:opacity-75 flex sm:hidden ml-5 py-2.5 px-5 text-[16px]' onClick={() => toggleFollowUser()}>
+                                {checkFollower ? 'Не стежити' : 'Стежити'}
+                            </Button> 
+                        }
                     </div>
 
                     <div className="h-0.5 w-full bg-dark-3 sm:hidden" />
 
                     <div className="flex w-full items-center gap-6">
                         <div className="flex gap-6">
-                        <Link href={`/followers/${accountId}`} className="text-heading3-bold text-[16px] text-light-2 hover:text-light-3">Читачі: 10</Link>
-                        <Link href={`/following/${accountId}`} className="text-heading3-bold text-[16px] text-light-2 hover:text-light-3">Стежить: 10</Link>
+                        <Link href={`/followers/${accountId}`} className="font-bold text-[14px] text-light-2 hover:opacity-85">Читачі: {followers}</Link>
+                        <Link href={`/following/${accountId}`} className="font-bold text-[14px] text-light-2 hover:opacity-85">Стежить: {following}</Link>
                         </div>
-                        <Button className='user-card_btn hover:opacity-75 hidden sm:flex' onClick={() => toggleFollowUser()}>Стежити</Button>
+                        { 
+                        accountId !== authUserId 
+                        && 
+                            <Button className='user-card_btn hover:opacity-75 hidden sm:flex' onClick={() => toggleFollowUser()}>
+                                {checkFollower ? 'Не стежити' : 'Стежити'}
+                            </Button> 
+                        } 
                     </div>
                 </div>
             </div>

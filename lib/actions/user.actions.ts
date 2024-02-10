@@ -267,6 +267,10 @@ export async function followUser({userId, currentUserId}: {userId: string, curre
             throw new Error('Користувача не існує');
         }
 
+        if(userId === currentUserId) {
+            throw new Error('Однакові користувачі!');
+        }
+
         if(user.followers.includes(currentUser._id)) {
             user.followers.pull(currentUser._id);
             currentUser.following.pull(user._id);
@@ -274,7 +278,51 @@ export async function followUser({userId, currentUserId}: {userId: string, curre
             user.followers.push(currentUser._id);
             currentUser.following.push(user._id);
         }
+        
+        user.save();
+        currentUser.save();
     } catch (error: any) {
         throw new Error(`Невдалося загрузити користувача: ${error.message}`);
+    }
+}
+
+export async function fetchFollowerAndFollowing(userId: string) {    
+    try {
+        connectToDB();
+
+        const user = await User.findOne({ id: userId })
+        .populate({
+            path: "followers",
+            model: User,
+            select: '_id id name username image'
+        })
+        .populate({
+            path: "following",
+            model: User,
+            select: '_id id name username image'
+        });
+
+        return user;
+    } catch (error: any) {
+        throw new Error(`Помилка з полученням даних про користувача ${error.message}`)
+    }
+}
+
+export async function checkFollowedUser(currentUserId: string, userId: string) {
+    try {
+        connectToDB();
+
+        const currentUser = await User.findOne({id: currentUserId});
+
+        const isFollowing = await User.findOne({id: userId});
+
+        if (isFollowing.followers.includes(currentUser._id)) {
+            return true
+        } else {
+            return false
+        }
+
+    } catch (error: any) {
+        throw new Error(`Помилка з полученням даних про користувача ${error.message}`)
     }
 }

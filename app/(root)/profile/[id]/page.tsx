@@ -5,7 +5,7 @@ import Image from "next/image";
 import ProfileHeader from "@/components/shared/ProfileHeader";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { profileTabs } from "@/constants";
-import { fecthUser, fetchUserPost, fetchUserReplies } from "@/lib/actions/user.actions";
+import { checkFollowedUser, fecthUser, fetchUserPost, fetchUserReplies } from "@/lib/actions/user.actions";
 import PostTab from "@/components/shared/PostTab";
 import React from "react";
 import LikedTab from "@/components/shared/LikedTab";
@@ -25,7 +25,8 @@ const Page = async ({params}: { params: {id: string}}) => {
     if(!userInfo?.onboarded) {
         redirect('/onboarding');
     }
-    
+
+    const checkFollower = await checkFollowedUser(user.id, params.id);
 
     return (
         <section>
@@ -35,6 +36,9 @@ const Page = async ({params}: { params: {id: string}}) => {
                 username={userInfo.username}
                 name={userInfo.name}
                 imgUrl={userInfo.image}
+                followers={userInfo.followers.length}
+                following={userInfo.following.length}
+                checkFollower={checkFollower}
                 bio={userInfo.bio}
             />
 
