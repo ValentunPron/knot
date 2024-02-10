@@ -102,7 +102,7 @@ const PostCard = ({
                             }
                         </div>
 
-                        <p className="mt-2 text-small-regular text-light-2 max-sm:text-[11px]">
+                        <div className="mt-2 text-small-regular text-light-2 max-sm:text-[12px]">
                             {
                                 isFullPost 
                                 ? <>{content}</>
@@ -116,7 +116,7 @@ const PostCard = ({
                                     </div>
                                 )
                             }
-                        </p>
+                        </div>
 
                         <div className={`${isComment && 'mb-7'} mt-5 flex-col gap-3`}>
                             <div className="flex gap-4">

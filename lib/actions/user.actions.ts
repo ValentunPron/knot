@@ -251,3 +251,30 @@ export async function fetchLikedPost(userId: string) {
     }
     
 }
+
+export async function followUser({userId, currentUserId}: {userId: string, currentUserId: string}) {
+    try {
+        connectToDB();
+        
+        const user = await User.findOne({id: userId});
+        const currentUser = await User.findOne({id: currentUserId});
+
+        if(!user) {
+            throw new Error('Користувача не існує');
+        }
+
+        if(!currentUser) {
+            throw new Error('Користувача не існує');
+        }
+
+        if(user.followers.includes(currentUser._id)) {
+            user.followers.pull(currentUser._id);
+            currentUser.following.pull(user._id);
+        } else {
+            user.followers.push(currentUser._id);
+            currentUser.following.push(user._id);
+        }
+    } catch (error: any) {
+        throw new Error(`Невдалося загрузити користувача: ${error.message}`);
+    }
+}

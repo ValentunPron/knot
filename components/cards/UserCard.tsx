@@ -40,7 +40,7 @@ const UserCard = ({id, name, username, imgUrl, personType, adaptiveNames = false
                     <p className='text-small-medium text-gray-1'>@{username}</p>
                 </div>
 
-                <Button className='user-card_btn' onClick={() => router.push(personType === 'Community' ? `/communities/${id}` : `/profile/${id}`)}>Переглянути</Button>
+                <Button className='user-card_btn hover:opacity-75' onClick={() => router.push(personType === 'Community' ? `/communities/${id}` : `/profile/${id}`)}>Переглянути</Button>
             </Link>
         </article>
     )

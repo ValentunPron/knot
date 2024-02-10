@@ -170,23 +170,54 @@ export async function addCommentToPost(
     }
 }
 
+async function deletePostAndLikedFromUser(user: any, resultId: string) {
+    try {
+        if (user.posts.includes(resultId)) {
+            // Використовуйте $pull для видалення postIdToDelete з масиву posts
+            await user.updateOne({ $pull: { posts: resultId } });
+            user.save();
+            console.log(`Пост ${resultId} видалено для користувача ${user.id}`);
+        } else {
+            console.log(`Поста ${resultId} немає у списку постів користувача ${user.id}`);
+        }
+
+        if (user.liked.includes(resultId)) {
+            // Використовуйте $pull для видалення postIdToDelete з масиву posts
+            await user.updateOne({ $pull: { liked: resultId } });
+            user.save();
+            console.log(`Пост ${resultId} видалено для користувача ${user.id}`);
+        } else {
+            console.log(`Поста ${resultId} немає у списку постів користувача ${user.id}`);
+        }
+    } catch (error: any) {
+        throw new Error(`Не вдалося видалити children post ${error.message}`);
+    }
+}
+
 export async function deletePostId({authorId, postId}: {authorId: string, postId: string}) {
     try {
         connectToDB();
 
-        const posts = await Post.findById(postId);
+        const post = await Post.findById(postId);
+        let resultId = post._id;
+        const user = await User.findOne({id: authorId})
+
+        Promise.all(post.children.map(async (resultId: string) => {
+            const postChildren = await Post.findById(resultId);
+            const userPostChildren = await User.findOne(postChildren.author);
+
+            deletePostAndLikedFromUser(userPostChildren, resultId);
+
+            await Post.findByIdAndDelete(resultId);
+        }))
+
+        deletePostAndLikedFromUser(user, resultId);
+
+        await Post.findByIdAndDelete(postId);
     } catch (error: any) {;
         throw new Error(`Не вдалося видалити пост ${error.message}`);
     }
 }
-
-// export async function ({posts, userId}: {posts: any, userId: string}) {
-//     try {
-//         posts.
-//     } catch (error: any) {;
-//         throw new Error(`Не вдалося добавити лайк ${error.message}`);
-//     }
-// }
 
 export async function likedPost({userId, postId}: {userId: string, postId: string}) {
     try {
