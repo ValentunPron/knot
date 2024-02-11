@@ -6,6 +6,8 @@ import { Button } from "../ui/button";
 import { followUser } from "@/lib/actions/user.actions";
 import { useRouter } from "next/navigation";
 
+import editImage from '@/assets/edit.svg';
+
 interface Props {
     accountId: string,
     authUserId: string,
@@ -18,6 +20,7 @@ interface Props {
     checkFollower: boolean,
     type?: 'User' | 'Community'
 }
+
 
 const ProfileHeader = ({accountId, authUserId, username, name, imgUrl, bio, followers, following, checkFollower, type}: Props) => {
 
@@ -71,6 +74,20 @@ const ProfileHeader = ({accountId, authUserId, username, name, imgUrl, bio, foll
                                         {checkFollower ? 'Не стежити' : 'Стежити'}
                                     </Button> 
                                 } 
+                                {
+                                    accountId === authUserId &&
+                                    <Link href='/profile/edit'>
+                                        <Button className="bg-dark-2 flex gap-4 hover:bg-dark-3">
+                                            <Image 
+                                                src={editImage}
+                                                alt="edit"
+                                                width={16}
+                                                height={16}
+                                            />
+                                            Редагувати
+                                        </Button>
+                                    </Link>
+                                }
                             </div>
                         </>
                     }

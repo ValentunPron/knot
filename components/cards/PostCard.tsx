@@ -180,6 +180,7 @@ const PostCard = ({
                     <DeletePost 
                         userId={currentUserId}
                         authorId={author.id}
+                        content={content}
                         postId={id}
                     />
                 </div>

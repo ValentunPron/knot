@@ -107,22 +107,33 @@ export const getActivity = async (userId: string) => {
         connectToDB();
 
         const userPosts = await Post.find({ author: userId });
+        const user = await User.findById(userId);
 
         const childrenPostIds = userPosts.reduce((acc, userPost) => {
             return acc.concat(userPost.children);
         }, []);
 
+        const LikesPostIds = userPosts.reduce((acc, userPost) => {
+            return acc.concat(userPost.likes);
+        }, []);
 
-        const replies = await Post.find({
+        const comments = await Post.find({
             _id: { $in: childrenPostIds },
             author: { $ne: userId }
         }).populate({
             path: 'author',
             model: User,
             select: 'name image _id'
+        });
+
+        const followed = await User.find({
+            _id: { $in: user.followers },
         })
 
-        return replies
+        return {
+            comments: comments,
+            followed: followed,
+        }
     } catch (error: any) {
         throw new Error(`Не вдалося загрузити активність користувача: ${error.message}`);
     }

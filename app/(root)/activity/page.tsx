@@ -26,8 +26,8 @@ const Page = async () => {
 
             <section className="mt-10 flex flex-col gap-5">
                 {
-                    activity.length > 0 ? (
-                        activity.map((active) => (
+                    activity.comments.length > 0 && (
+                        activity.comments.map((active) => (
                             <Link key={active._id} href={`/post/${active.parentId}`}>
                                 <article className="activity-card">
                                     <Image 
@@ -47,7 +47,35 @@ const Page = async () => {
                             </Link>
                         ))
                     )
-                    : <p className="!text-base-regular text-light-3">Немає активонсті</p>
+                }
+
+                {
+                    
+                    activity.followed.length > 0 && (
+                        activity.followed.map((active) => (
+                            <Link key={active._id} href={`/profile/${active.id}`}>
+                                <article className="activity-card">
+                                    <Image 
+                                        src={active.image}
+                                        alt="Person avatar"
+                                        width={32}
+                                        height={32}
+                                        className='rounded-full object-cover h-[32px]'
+                                    />
+
+                                    <p className="!text-small-regular text-light-1">
+                                        <span className="mr-1 text-primary-500">{active.name}</span>
+                                        {"  "}
+                                        стежить за вами
+                                    </p>
+                                </article>
+                            </Link>
+                        ))
+                    )
+                }
+
+                {
+                    (activity.comments.length === 0 && activity.followed.length === 0) && <p className="!text-base-regular text-light-3">Немає активонсті</p>
                 }
             </section>
         </section>
