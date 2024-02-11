@@ -3,7 +3,7 @@
 import Image from "next/image";
 
 import deleteImage from "@/assets/delete.svg";
-import { redirect, useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { deletePostId } from "@/lib/actions/post.actions";
 
 function DeletePost({
@@ -16,6 +16,7 @@ function DeletePost({
     postId: string,
 }) {
     const router = useRouter();
+    const pathname = usePathname();
     
     if(userId !== authorId) {
         return null
@@ -23,7 +24,11 @@ function DeletePost({
 
     async function handleClick() {
         await deletePostId({authorId, postId});
-        router.push('/');
+        if(pathname === '/' || pathname.match(/^\/profile/)) {
+            router.refresh();
+        } else {
+            router.push('/');
+        }
     }
 
     return (

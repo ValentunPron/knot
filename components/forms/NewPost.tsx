@@ -5,7 +5,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
 import { useRouter, usePathname } from 'next/navigation';
-import Image from 'next/image';
 
 import { Button } from "@/components/ui/button"
 import {
@@ -22,7 +21,7 @@ import { textCreatedPost } from '@/constants';
 import { createPost } from '@/lib/actions/post.actions';
 import { useOrganization } from '@clerk/nextjs';
 
-function NewPost({userId}: {userId: string}) {
+function NewPost({userId, repostedText}: {userId: string, repostedText?: string}) {
     const router = useRouter();
     const pathname = usePathname();
     const { organization } = useOrganization();

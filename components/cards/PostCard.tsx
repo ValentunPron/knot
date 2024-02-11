@@ -9,6 +9,7 @@ import repost from "@/assets/repost.svg";
 import share from "@/assets/share.svg";
 import DeletePost from "../atoms/DeletePost";
 import LikePost from "../atoms/LikePost";
+import RepostedPost from "../atoms/RepostedPost";
 
 
 
@@ -128,8 +129,11 @@ const PostCard = ({
                                 <Link href={`/post/${id}`}>
                                     <Image src={reply} alt="reply" width={26} height={26} className="cursor-pointer object-contain"/>
                                 </Link>
-                                <Image src={repost} alt="repost" width={26} height={26} className="cursor-pointer object-contain"/>
-                                <Image src={share} alt="share" width={26} height={26} className="cursor-pointer object-contain"/>
+                                <RepostedPost 
+                                    userId={currentUserId}
+                                    content={content}
+                                    community={community}
+                                />
                             </div>
 
                             <div className="flex gap-2 mt-2">

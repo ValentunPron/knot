@@ -40,6 +40,7 @@ const Page = async ({params}: { params: {id: string}}) => {
                 following={userInfo.following.length}
                 checkFollower={checkFollower}
                 bio={userInfo.bio}
+                type="User"
             />
 
             <Tabs defaultValue='posts' className="w-full">
