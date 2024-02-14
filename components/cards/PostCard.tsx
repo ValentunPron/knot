@@ -122,7 +122,7 @@ const PostCard = ({
                                     : 
                                     <div>
                                         {truncateText(content)}
-                                        <Link href={`post/${id}`} className="block mt-1 text-blue dark:text-blue-500 hover:underline">Показати більше</Link>
+                                        <Link href={`/post/${id}`} className="block mt-1 text-blue dark:text-blue-500 hover:underline">Показати більше</Link>
                                     </div>
                                 )
                             }
