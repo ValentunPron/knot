@@ -21,11 +21,11 @@ export const sidebarLinks = [
       route: "/search",
       label: "Пошук",
     },
-    {
-      imgURL: heart,
-      route: "/activity",
-      label: "Активність",
-    },
+    // {
+    //   imgURL: heart,
+    //   route: "/activity",
+    //   label: "Активність",
+    // },
     {
       imgURL: create,
       route: "/create-post",
