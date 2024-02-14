@@ -123,7 +123,7 @@ const PostCard = ({
                                     src={image}
                                     alt="image post"
                                     width={100} height={100}
-                                    className='object-cover w-full h-auto mt-5'
+                                    className='object-scale-down w-full h-auto max-h-[450px] mt-5'
                                 />
                             }
                         </div>
@@ -138,11 +138,12 @@ const PostCard = ({
                                 <Link href={`/post/${id}`}>
                                     <Image src={reply} alt="reply" width={26} height={26} className="cursor-pointer object-contain"/>
                                 </Link>
-                                <RepostedPost 
+                                {/* <RepostedPost 
                                     userId={currentUserId}
                                     content={content}
+                                    image={image}
                                     community={community}
-                                />
+                                /> */}
                             </div>
 
                             <div className="flex gap-2 mt-2">

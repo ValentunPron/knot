@@ -3,7 +3,7 @@
 import Image from "next/image";
 
 import repost from "@/assets/repost.svg";
-import { repostedPost } from "@/lib/actions/post.actions";
+import { createPost } from "@/lib/actions/post.actions";
 import React from "react";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -22,11 +22,13 @@ import { Button } from "../ui/button";
 function RepostedPost({
     userId,
     content,
+    image,
     community,
     
 }: {
     userId: string,
     content: string,
+    image: string,
     community: {
         id: string,
         name: string,
@@ -36,11 +38,12 @@ function RepostedPost({
     const router = useRouter();
     const pathname = usePathname();
 
-    const onSubmit = async () => {
-        await repostedPost({ 
+    async function onSubmit() {
+        await createPost({ 
             text: content,
             author: userId,
             communityId: community ? community.id : null,
+            image: image ? image : '',
             path: pathname,
         });
 
@@ -69,7 +72,7 @@ function RepostedPost({
                                 <Button className="rounded-full w-24 hover:opacity-85">Ні</Button>
                             </DialogClose>
                             <DialogClose asChild>
-                                <Button className="comment-form_btn w-24 hover:opacity-85" onClick={onSubmit}>Так</Button>
+                                <Button className="comment-form_btn w-24 hover:opacity-85">Так</Button>
                             </DialogClose>
                         </div>
                     </div>

@@ -22,11 +22,14 @@ import { createPost } from '@/lib/actions/post.actions';
 import { useOrganization } from '@clerk/nextjs';
 import Image from 'next/image';
 import { Input } from '../ui/input';
+import { isBase64Image } from '@/lib/utils';
+import { useUploadThing } from '@/lib/uploadthing';
 
 function NewPost({userId, repostedText}: {userId: string, repostedText?: string}) {
     const router = useRouter();
     const pathname = usePathname();
     const { organization } = useOrganization();
+    const { startUpload }: any = useUploadThing('media');
 
     const [files, setFiles] = React.useState<File[]>([]);
     const [messagePost, setMessagePost] = React.useState('');
@@ -41,17 +44,17 @@ function NewPost({userId, repostedText}: {userId: string, repostedText?: string}
         defaultValues: {
             post: '',
             post_photo: '',
-            post_profile: '',
             accountId: userId
         }
     });
 
     const handleImage = (e: ChangeEvent<HTMLInputElement>, fieldChange: (value: string) => void) => {
         e.preventDefault();
-  
+        
         const fileReader = new FileReader();
   
         if(e.target.files && e.target.files.length > 0) {
+            console.log('suka');
           const file = e.target.files[0];
   
           setFiles(Array.from(e.target.files));
@@ -60,15 +63,34 @@ function NewPost({userId, repostedText}: {userId: string, repostedText?: string}
   
           fileReader.onload = async (event) => {
             const imageDataUrl = event.target?.result?.toString() || '';
+            console.log(imageDataUrl);
     
             fieldChange(imageDataUrl);
           }
     
           fileReader.readAsDataURL(file);
+        } else {
+            console.log('suka')
         }
     }
 
     const onSubmit = async (values: z.infer<typeof PostValidation>) => {
+        const blob = values.post_photo;
+
+        if(blob) {
+            const hasImageChanged = isBase64Image(blob);
+  
+            if(hasImageChanged) {
+              const imgRes = await startUpload(files);
+      
+              if(imgRes && imgRes[0].url) {
+                values.post_photo = imgRes[0].url;
+              }
+            }
+        }
+
+        await console.log('IMAGE', values.post_photo);
+
         await createPost({ 
             text: values.post,
             author: userId,
@@ -109,31 +131,29 @@ function NewPost({userId, repostedText}: {userId: string, repostedText?: string}
                             name="post_photo"
                             render={({ field }) => (
                                 <FormItem className='flex items-center gap-4 flex-col'>
-                                <FormLabel className=''>
-                                    {
-                                        field.value
-                                        ? 
-                                        <Image 
-                                            src={field.value}
-                                            alt='profile photo'
-                                            width={100}
-                                            height={100}
-                                            priority
-                                            className='object-cover w-full h-auto'
-                                        />
-                                        : ''
-                                    }
-                                </FormLabel>
-                                <FormControl className='flex-1 text-base-semibold text-gray-200'>
-                                            <Input 
+                                    <FormLabel>
+                                        {
+                                            field.value
+                                            && 
+                                            <Image 
+                                                src={field.value}
+                                                alt='post photo'
+                                                width={100}
+                                                height={100}
+                                                className='object-cover w-full h-auto max-h-[400px]'
+                                            />
+                                        }
+                                    </FormLabel>
+                                    <FormControl className='flex-1 text-base-semibold text-gray-200'>
+                                        <Input 
                                             type="file"
                                             accept='image/*'
                                             placeholder='Загрузіть фото'
                                             className='account-form_image-input'
                                             onChange={(e) => handleImage(e, field.onChange)} 
-                                            />
-                                </FormControl>
-                                <FormMessage />
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />

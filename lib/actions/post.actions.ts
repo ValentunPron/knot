@@ -12,7 +12,7 @@ interface Params {
     text: string,
     author: string,
     communityId: string | null,
-    image: string
+    image?: string | null,
     path: string,
 }
 
@@ -43,7 +43,7 @@ export async function createPost({text, author, communityId, image, path}: Param
     }
 }
 
-export async function fetchPost(pageNumber = 1, pageSize = 20) {
+export async function fetchPost(pageNumber = 1, pageSize = 10) {
     try {
         connectToDB();
 

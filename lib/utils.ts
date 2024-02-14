@@ -34,7 +34,7 @@ export function formatThreadCount(count: number): string {
     return "No Threads";
   } else {
     const threadCount = count.toString().padStart(2, "0");
-    const threadWord = count === 1 ? "Thread" : "Threads";
+    const threadWord = count === 1 ? "Post" : "Posts";
     return `${threadCount} ${threadWord}`;
   }
 }
