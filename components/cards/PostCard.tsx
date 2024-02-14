@@ -246,7 +246,7 @@ const PostCard = ({
                                             height={28}
                                             className={`${
                                             index !== 0 && "-ml-3"
-                                            } rounded-full object-fill w-[28px] h-[28px] max-sm:w-[24px] max-sm:h-[24px]`}
+                                            } rounded-full object-cover w-[28px] h-[28px] max-sm:w-[24px] max-sm:h-[24px]`}
                                         />
                                         )
                                     }
