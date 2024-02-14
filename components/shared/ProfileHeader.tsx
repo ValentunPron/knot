@@ -17,7 +17,7 @@ interface Props {
     bio: string,
     followers?: number,
     following?: number,
-    checkFollower: boolean,
+    checkFollower?: boolean,
     type?: 'User' | 'Community'
 }
 
