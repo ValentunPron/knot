@@ -35,6 +35,7 @@ const PostTab = async ({currentUserId, accoundId, accountType, replies = false}:
                     currentUserId={currentUserId}
                     parentId={post.parentId}
                     content={post.text}
+                    image={post.image}
                     author={
                         accountType === 'User' 
                         ? { name: posts.name, image: posts.image, id: posts.id }

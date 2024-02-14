@@ -12,10 +12,11 @@ interface Params {
     text: string,
     author: string,
     communityId: string | null,
+    image: string
     path: string,
 }
 
-export async function createPost({text, author, communityId, path}: Params) {
+export async function createPost({text, author, communityId, image, path}: Params) {
     try {
         connectToDB();
 
@@ -24,7 +25,7 @@ export async function createPost({text, author, communityId, path}: Params) {
             { _id: 1 }
         );
 
-        const post = await Post.create({text, author, community: communityIdObject});
+        const post = await Post.create({text, author, image, community: communityIdObject});
     
         await User.findByIdAndUpdate(author, {
             $push: { posts: post._id }

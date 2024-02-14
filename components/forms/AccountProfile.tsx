@@ -124,7 +124,7 @@ const AccountProfile = ({ user, btnTitle}: Props) => {
                           width={96}
                           height={96}
                           priority
-                          className='rounded-full object-cover'
+                          className='rounded-full object-cover w-[96px] h-[96px]'
                         />
                       ) : (
                         <Image 

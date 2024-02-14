@@ -34,6 +34,7 @@ const Page = async ({params}: {params: {id: string}}) => {
                 currentUserId={user?.id || ""}
                 parentId={post.parentId}
                 content={post.text}
+                image={post.image}
                 author={post.author}
                 likes={post.likes}
                 likedStatus={userInfo.liked.includes(post._id)}

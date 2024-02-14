@@ -3,10 +3,7 @@ import Image from "next/image";
 import { format } from 'date-fns';
 import { uk } from 'date-fns/locale';
 
-import heart from "@/assets/heart-gray.svg";
 import reply from "@/assets/reply.svg";
-import repost from "@/assets/repost.svg";
-import share from "@/assets/share.svg";
 import DeletePost from "../atoms/DeletePost";
 import LikePost from "../atoms/LikePost";
 import RepostedPost from "../atoms/RepostedPost";
@@ -18,6 +15,7 @@ interface Props {
     currentUserId: string,
     parentId: string | null,
     content: string,
+    image: string,
     author: {
         id: string,
         name: string,
@@ -48,6 +46,7 @@ const PostCard = ({
     currentUserId,
     parentId,
     content,
+    image,
     author,
     likes,
     likedStatus,
@@ -116,6 +115,16 @@ const PostCard = ({
                                         <Link href={`post/${id}`} className="block mt-1 text-blue dark:text-blue-500 hover:underline">Показати більше</Link>
                                     </div>
                                 )
+                            }
+
+                            {
+                                image && 
+                                <Image 
+                                    src={image}
+                                    alt="image post"
+                                    width={100} height={100}
+                                    className='object-cover w-full h-auto mt-5'
+                                />
                             }
                         </div>
 

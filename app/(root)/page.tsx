@@ -38,6 +38,7 @@ export default async function Home() {
                     currentUserId={userInfo.id || ""}
                     parentId={post.parentId}
                     content={post.text}
+                    image={post.image}
                     author={post.author}
                     likes={post.likes}
                     likedStatus={userInfo.liked.includes(post._id)}

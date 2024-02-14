@@ -1,7 +1,7 @@
 import NewPost from "@/components/forms/NewPost";
 import { fecthUser } from "@/lib/actions/user.actions";
-import { currentUser } from "@clerk/nextjs"
-import { redirect } from "next/navigation"
+import { currentUser } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
 
 async function Page() {
     const user = await currentUser();
