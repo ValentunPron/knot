@@ -75,31 +75,41 @@ const PostCard = ({
                                 src={author.image}
                                 alt={author.name}
                                 fill
-                                className="cursor-pointer rounded-full"
+                                className="cursor-pointer object-cover rounded-full"
                             />
                         </Link>
 
                         <div className="thread-card_bar" />
                     </div>
                     <div className="flex w-full flex-col">
-                        <div className="flex gap-3 items-center">
-                            <Link href={`/profile/${author.id}`} className="w-fit">
-                                <h4 className="cursor-pointer text-base-semibold text-light-2">{author.name}</h4>
-                            </Link>
-                            {
-                                !isComment && community && (
-                                    <Link href={`/communities/${community.id}`} className="flex items-center max-sm:hidden">
-                                        <p className="text-subtle-medium text-gray-1">| {community.name} </p>
-                                        <Image 
-                                            src={community.image}
-                                            alt={community.name}
-                                            width={28}
-                                            height={28}
-                                            className="rounded-full ml-2 object-cover w-[28px] h-[28px]"
-                                        />
-                                    </Link>
-                                )
-                            }
+                        <div className="flex w-full justify-between">
+                            <div className="flex gap-3 items-center">
+                                <Link href={`/profile/${author.id}`} className="w-fit">
+                                    <h4 className="cursor-pointer text-base-semibold text-light-2">{author.name}</h4>
+                                </Link>
+                                {
+                                    !isComment && community && (
+                                        <Link href={`/communities/${community.id}`} className="flex items-center max-sm:hidden">
+                                            <p className="text-subtle-medium text-gray-1">| {community.name} </p>
+                                            <Image 
+                                                src={community.image}
+                                                alt={community.name}
+                                                width={28}
+                                                height={28}
+                                                className="rounded-full ml-2 object-cover w-[28px] h-[28px]"
+                                            />
+                                        </Link>
+                                    )
+                                }
+                            </div>
+                            <div>
+                                <DeletePost 
+                                    userId={currentUserId}
+                                    authorId={author.id}
+                                    content={content}
+                                    postId={id}
+                                />
+                            </div>
                         </div>
 
                         <div className="mt-2 text-small-regular text-light-2 max-sm:text-[12px]">
@@ -123,7 +133,7 @@ const PostCard = ({
                                     src={image}
                                     alt="image post"
                                     width={100} height={100}
-                                    className='object-scale-down w-full h-auto max-h-[450px] mt-5'
+                                    className='object-scale-down w-full h-auto max-h-[500px] mt-5'
                                 />
                             }
                         </div>
@@ -186,14 +196,6 @@ const PostCard = ({
                         </div>
                     </div>
                 </div>
-                <div>
-                    <DeletePost 
-                        userId={currentUserId}
-                        authorId={author.id}
-                        content={content}
-                        postId={id}
-                    />
-                </div>
             </div>
             <div className="flex gap-5">
                 {
@@ -244,7 +246,7 @@ const PostCard = ({
                                             height={28}
                                             className={`${
                                             index !== 0 && "-ml-3"
-                                            } rounded-full object-cover w-[28px] h-[28px] max-sm:w-[24px] max-sm:h-[24px]`}
+                                            } rounded-full object-fill w-[28px] h-[28px] max-sm:w-[24px] max-sm:h-[24px]`}
                                         />
                                         )
                                     }

@@ -49,6 +49,30 @@ const Page = async () => {
                     )
                 }
 
+{
+                    activity.likes.length > 0 && (
+                        activity.likes.map((active) => (
+                            <Link key={active._id} href={`/profile/${active.id}`}>
+                                <article className="activity-card">
+                                    <Image 
+                                        src={active.image}
+                                        alt="Person avatar"
+                                        width={32}
+                                        height={32}
+                                        className='rounded-full object-cover h-[32px]'
+                                    />
+
+                                    <p className="!text-small-regular text-light-1">
+                                        <span className="mr-1 text-primary-500">{active.name}</span>
+                                        {"  "}
+                                        вподобав ваш пост
+                                    </p>
+                                </article>
+                            </Link>
+                        ))
+                    )
+                }
+
                 {
                     
                     activity.followed.length > 0 && (

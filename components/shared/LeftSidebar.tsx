@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 
 import logout from '@/assets/logout.svg';
+import Exit from '../atoms/Exit';
 
 function LeftSidebar() {
     const router = useRouter();
@@ -45,16 +46,8 @@ function LeftSidebar() {
 
             </div>
             <div className='mt-10 px-6'>
-                    <SignedIn>
-                        <SignOutButton signOutCallback={() => router.push('/sing-in')}>
-                            <div className='flex cursor-pointer gap-4 p-4'>
-                                <Image src={logout} alt='logout' width={24} height={24}/>
-                                
-                                 <p className='text-light-1 max-lg:hidden'>Вихід</p>
-                            </div>
-                        </SignOutButton>
-                    </SignedIn>
-                </div>
+                <Exit />
+            </div>
         </section>
     )
 }

@@ -113,7 +113,7 @@ export const getActivity = async (userId: string) => {
             return acc.concat(userPost.children);
         }, []);
 
-        const LikesPostIds = userPosts.reduce((acc, userPost) => {
+        const likesPostIds = userPosts.reduce((acc, userPost) => {
             return acc.concat(userPost.likes);
         }, []);
 
@@ -126,14 +126,17 @@ export const getActivity = async (userId: string) => {
             select: 'name image _id'
         });
 
+        const likes = await User.find({
+            _id: { $in: likesPostIds, $ne: userId},
+        })
+
         const followed = await User.find({
             _id: { $in: user.followers },
         })
 
-        return {
-            comments: comments,
-            followed: followed,
-        }
+        await console.log('LIKES', likes[0]._id);
+
+        return { comments, likes, followed }
     } catch (error: any) {
         throw new Error(`Не вдалося загрузити активність користувача: ${error.message}`);
     }

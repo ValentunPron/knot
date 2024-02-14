@@ -54,7 +54,6 @@ function NewPost({userId, repostedText}: {userId: string, repostedText?: string}
         const fileReader = new FileReader();
   
         if(e.target.files && e.target.files.length > 0) {
-            console.log('suka');
           const file = e.target.files[0];
   
           setFiles(Array.from(e.target.files));
@@ -69,8 +68,6 @@ function NewPost({userId, repostedText}: {userId: string, repostedText?: string}
           }
     
           fileReader.readAsDataURL(file);
-        } else {
-            console.log('suka')
         }
     }
 
@@ -140,7 +137,7 @@ function NewPost({userId, repostedText}: {userId: string, repostedText?: string}
                                                 alt='post photo'
                                                 width={100}
                                                 height={100}
-                                                className='object-cover w-full h-auto max-h-[400px]'
+                                                className='object-cover w-full h-auto max-h-[500px]'
                                             />
                                         }
                                     </FormLabel>
