@@ -1,12 +1,15 @@
 import PostCard from "@/components/cards/PostCard";
+import Pagination from "@/components/shared/Pagination";
 import { fetchPost } from "@/lib/actions/post.actions"
 import { fecthUser } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
 import React from "react";
 
-export default async function Home() {
-  const posts = await fetchPost();
+export default async function Home({searchParams} : {searchParams: { [key: string]: string | undefined }}) {
+  const posts = await fetchPost(
+    searchParams.page ? +searchParams.page : 1,
+    15
+  );
   const user = await currentUser();
 
   const userInfo = await fecthUser(user !== null ? user.id : '');
@@ -43,6 +46,12 @@ export default async function Home() {
           )
         }
       </section>
+
+      <Pagination
+        path="/"
+        pageNumber={searchParams?.page ? +searchParams.page : 1}
+        isNext={posts.isNext}
+      />
     </>
   )
 }

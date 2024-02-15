@@ -33,15 +33,6 @@ function Topbar() {
                         }
                     }}
                 />
-
-                <UserButton 
-                    appearance={{
-                        baseTheme: dark,
-                        elements: {
-                            organizationSwitcherTrigger: 'py-4 px-2'
-                        }
-                    }}
-                /> 
             </div>
         </nav>
     )

@@ -11,8 +11,9 @@ async function Page() {
     }
 
     const userInfo = await fecthUser(user.id);
+    
 
-    if(userInfo?.onboarding) {
+    if(userInfo?.onboarded) {
         redirect('/')
     }
 

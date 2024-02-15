@@ -27,7 +27,7 @@ async function Page() {
       <h1 className='head-text'>Редагування профію</h1>
 
       <section className='mt-12'>
-        <AccountProfile user={userData} btnTitle='Continue' />
+        <AccountProfile user={userData} btnTitle='Continue' editAccount={true} />
       </section>
     </>
   );

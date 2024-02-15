@@ -28,6 +28,7 @@ const LikedTab = async ({currentUserId, accoundId, accountType}: Props) => {
                     currentUserId={currentUserId}
                     parentId={post.parentId}
                     content={post.text}
+                    image={post.image}
                     author={
                         { name: post.author.name, image: post.author.image, id: post.author.id}
                     }

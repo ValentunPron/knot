@@ -7,6 +7,7 @@ import { FilterQuery, SortOrder } from "mongoose";
 import User from "../models/user.model";
 import Post from "../models/post.model";
 import Community from "../models/community.model";
+import { clerkClient } from "@clerk/nextjs";
 
 interface Params {
     userId: string,
@@ -53,6 +54,28 @@ export async function fecthUser(userId: string) {
         return user;
     } catch (error: any) {
         throw new Error(`Помилка з полученням даних про користувача ${error.message}`)
+    }
+}
+
+export async function deleteUser(userId: string) {
+    try {
+        connectToDB();
+
+        const user = await User.findOne({id: userId});
+        
+
+        await Post.deleteMany({_id: { $in: user.posts}});
+        await Post.updateMany({_id: { $in: user.liked}}, { $pull: { likes: user._id}});
+        await User.updateMany({_id: { $in: user.following}}, { $pull: { followers: user._id}});
+        await User.updateMany({_id: { $in: user.followers}}, { $pull: { following: user._id}});
+        await Community.updateMany({_id: { $in: user.communities}}, { $pull: { members: user._id}});
+        
+        await clerkClient.users.deleteUser(userId);
+        await User.findOneAndDelete({id: userId});
+
+        return { success: true }
+    } catch (error: any) {
+        throw new Error(`Невдалося видалити аккаунт ${error.message}`)
     }
 }
 

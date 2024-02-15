@@ -43,7 +43,7 @@ export async function createPost({text, author, communityId, image, path}: Param
     }
 }
 
-export async function fetchPost(pageNumber = 1, pageSize = 10) {
+export async function fetchPost(pageNumber = 1, pageSize = 15) {
     try {
         connectToDB();
 

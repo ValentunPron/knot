@@ -24,6 +24,7 @@ import { isBase64Image } from '@/lib/utils';
 import { useUploadThing } from '@/lib/uploadthing';
 import { updateUser } from '@/lib/actions/user.actions';
 import { useRouter, usePathname } from 'next/navigation';
+import DeleteAccount from '../atoms/DeleteAccount';
 
 interface Props {
     user: {
@@ -35,9 +36,10 @@ interface Props {
         image: string,
     },
     btnTitle: string
+    editAccount?: boolean,
 }
 
-const AccountProfile = ({ user, btnTitle}: Props) => {
+const AccountProfile = ({ user, btnTitle, editAccount}: Props) => {
     const [files, setFiles] = React.useState<File[]>([]);
     const { startUpload }: any = useUploadThing('media');
     const router = useRouter();
@@ -207,6 +209,17 @@ const AccountProfile = ({ user, btnTitle}: Props) => {
               </FormItem>
             )}
           />
+          
+          {
+            editAccount &&
+            <div className='flex justify-between gap-4'>
+              <div>
+                <h3 className='text-heading3-bold text-light-1'>Видалення профілю</h3>
+                <p className='mt-2 text-light-1'>Видалення акаунту незворотнє! Всі дані, включаючи налаштування та історію, будуть втрачені. </p>
+              </div>
+              <DeleteAccount userId={user.id} />
+            </div>
+          }
           <Button className='bg-primary-500'>Відправити</Button>
         </form>
       </Form>
