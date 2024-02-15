@@ -6,7 +6,7 @@ import heart from "@/assets/heart-gray.svg";
 import heartFilled from "@/assets/heart-filled.svg";
 import { likedPost } from "@/lib/actions/post.actions";
 import React from "react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 
 function LikePost({
     userId,
@@ -14,15 +14,19 @@ function LikePost({
     postId,
     
 }: {
-    userId: string,
+    userId: string | null,
     likedStatus: boolean,
     postId: string,
 }) {
     const router = useRouter();
 
     async function handleClick() {
-        await likedPost({userId, postId});
-        router.refresh()
+        if(!userId) {
+            router.push('/sing-in');
+        } else {
+            await likedPost({userId, postId});
+            router.refresh()
+        }
     }
     
     return (

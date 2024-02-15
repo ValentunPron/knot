@@ -9,16 +9,7 @@ export default async function Home() {
   const posts = await fetchPost();
   const user = await currentUser();
 
-  if(!user) {
-    redirect('/sing-in');
-  }
-
-  const userInfo = await fecthUser(user.id);
-  
-  
-  if(!userInfo?.onboarded) {
-    redirect('/onboarding');
-  }
+  const userInfo = await fecthUser(user !== null ? user.id : '');
 
   return (
     <>
@@ -35,13 +26,13 @@ export default async function Home() {
                   <PostCard 
                     key={post._id}
                     id={post._id}
-                    currentUserId={userInfo.id || ""}
+                    currentUserId={userInfo !== null ? userInfo.id : null}
                     parentId={post.parentId}
                     content={post.text}
                     image={post.image}
                     author={post.author}
                     likes={post.likes}
-                    likedStatus={userInfo.liked.includes(post._id)}
+                    likedStatus={userInfo !== null ? userInfo.liked.includes(post._id): false}
                     community={post.community}
                     createdAt={post.createdAt}
                     comments={post.children}

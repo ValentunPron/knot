@@ -12,7 +12,7 @@ import RepostedPost from "../atoms/RepostedPost";
 
 interface Props {
     id: string,
-    currentUserId: string,
+    currentUserId: string | null,
     parentId: string | null,
     content: string,
     image: string,
