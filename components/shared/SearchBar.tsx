@@ -31,7 +31,7 @@ function SearchBar({routeType}: {routeType: string}) {
                 className='object-cover'
             />
             <Input 
-                placeholder="Пошук групи..."
+                placeholder="Пошук..."
                 className="bg-transparent border-none no-focus text-light-3"
                 onChange={(e) => setSearchValue(e.target.value)}
             />

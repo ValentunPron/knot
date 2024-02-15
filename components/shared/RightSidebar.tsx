@@ -2,6 +2,7 @@ import { fetchUsers } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs";
 import UserCard from "../cards/UserCard";
 import { fetchCommunities } from "@/lib/actions/community.actions";
+import React from "react";
 
 async function RightSidebar() {
     const user = await currentUser();
@@ -14,7 +15,7 @@ async function RightSidebar() {
     const reccomentComumunities = await fetchCommunities({pageSize: 4});
     
     return (
-        <section className="custom-scrollbar rightsidebar">
+        <section className={`custom-scrollbar rightsidebar`}>
             <div className="flex flex-1 flex-col justify-start">
                 <h3 className="text-heading4-medium text-light-1">Рекомендовані користувачі</h3>
                 <div className="mt-4 flex flex-col gap-6">

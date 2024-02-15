@@ -117,24 +117,28 @@ export const getActivity = async (userId: string) => {
             return acc.concat(userPost.likes);
         }, []);
 
-        const comments = await Post.find({
-            _id: { $in: childrenPostIds },
-            author: { $ne: userId }
-        }).populate({
-            path: 'author',
-            model: User,
-            select: 'name image _id'
-        });
+        let comments, likes;
 
-        const likes = await User.find({
-            _id: { $in: likesPostIds, $ne: userId},
-        })
+        if(childrenPostIds.length > 0) {
+            comments = await Post.find({
+                _id: { $in: childrenPostIds },
+                author: { $ne: userId }
+            }).populate({
+                path: 'author',
+                model: User,
+                select: 'name image _id'
+            });
+        }
+
+        if(likesPostIds.length > 0) {
+            likes = await User.find({
+                _id: { $in: likesPostIds, $ne: userId},
+            })
+        }
 
         const followed = await User.find({
             _id: { $in: user.followers },
         })
-
-        await console.log('LIKES', likes[0]._id);
 
         return { comments, likes, followed }
     } catch (error: any) {

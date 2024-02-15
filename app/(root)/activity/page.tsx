@@ -26,7 +26,7 @@ const Page = async () => {
 
             <section className="mt-10 flex flex-col gap-5">
                 {
-                    activity.comments.length > 0 && (
+                    activity.comments && activity.comments.length > 0 && (
                         activity.comments.map((active) => (
                             <Link key={active._id} href={`/post/${active.parentId}`}>
                                 <article className="activity-card">
@@ -50,7 +50,7 @@ const Page = async () => {
                 }
 
 {
-                    activity.likes.length > 0 && (
+                    activity.likes && activity.likes.length > 0 && (
                         activity.likes.map((active) => (
                             <Link key={active._id} href={`/profile/${active.id}`}>
                                 <article className="activity-card">
@@ -99,7 +99,7 @@ const Page = async () => {
                 }
 
                 {
-                    (activity.comments.length === 0 && activity.followed.length === 0) && <p className="!text-base-regular text-light-3">Немає активонсті</p>
+                    (!activity.comments && !activity.likes && activity.followed.length === 0) && <p className="!text-base-regular text-light-3">Немає активонсті</p>
                 }
             </section>
         </section>

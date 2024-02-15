@@ -4,6 +4,7 @@ import { redirect } from "next/navigation"
 import { fecthUser, fetchUsers } from "@/lib/actions/user.actions";
 import UserCard from "@/components/cards/UserCard";
 import SearchBar from "@/components/shared/SearchBar";
+import Pagination from "@/components/shared/Pagination";
 
 const Page = async ({searchParams}: {searchParams: {[key: string]: string | undefined}}) => {
     const user = await currentUser();
@@ -21,7 +22,7 @@ const Page = async ({searchParams}: {searchParams: {[key: string]: string | unde
     const result = await fetchUsers({
         userId: userInfo.id,
         searchString: searchParams.search,
-        pageNumber: 1,
+        pageNumber: searchParams?.page ? +searchParams.page : 1,
         pageSize: 12
     });
 
@@ -52,6 +53,12 @@ const Page = async ({searchParams}: {searchParams: {[key: string]: string | unde
                     ))
                 }
             </div>
+
+            <Pagination
+                path='search'
+                pageNumber={searchParams?.page ? +searchParams.page : 1}
+                isNext={result.isNext}
+             />
         </section>
     )
 }
