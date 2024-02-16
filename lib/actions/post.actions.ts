@@ -43,6 +43,37 @@ export async function createPost({text, author, communityId, image, path}: Param
     }
 }
 
+export async function editPost({
+    postId,
+    text,
+    image,
+    path,
+  }: {
+    postId: string;
+    text: string;
+    image: string
+    path: string;
+  }) {
+    try {
+      connectToDB();
+  
+      const post = await Post.findById(postId);
+  
+      if (!post) {
+        throw new Error("Пост не найдено");
+      }
+  
+      post.text = text;
+      post.image = image;
+  
+      await post.save();
+  
+      revalidatePath(path);
+    } catch (error: any) {
+      throw new Error(`Помилка при редагуванні поста: ${error.message}`);
+    }
+  }
+
 export async function fetchPost(pageNumber = 1, pageSize = 15) {
     try {
         connectToDB();

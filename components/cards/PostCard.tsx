@@ -5,6 +5,7 @@ import { uk } from 'date-fns/locale';
 
 import reply from "@/assets/reply.svg";
 import DeletePost from "../atoms/DeletePost";
+import editPost from "@/assets/edit.svg";
 import LikePost from "../atoms/LikePost";
 import RepostedPost from "../atoms/RepostedPost";
 
@@ -102,14 +103,25 @@ const PostCard = ({
                                     )
                                 }
                             </div>
-                            <div>
-                                <DeletePost 
-                                    userId={currentUserId}
-                                    authorId={author.id}
-                                    content={content}
-                                    postId={id}
-                                />
-                            </div>
+                            {
+                                currentUserId && currentUserId === author.id &&
+                                <div className="flex gap-4">
+                                    <Link href={`/post/edit/${id}`}>
+                                        <Image 
+                                            src={editPost}
+                                            alt="edit post"
+                                            width={24}
+                                            height={24}
+                                            className="object-contain cursor-pointer hover:opacity-85"
+                                        />
+                                    </Link>
+                                    <DeletePost 
+                                        authorId={author.id}
+                                        content={content}
+                                        postId={id}
+                                    />
+                                </div>
+                            }
                         </div>
 
                         <div className="mt-2 text-small-regular text-light-2 max-sm:text-[12px]">

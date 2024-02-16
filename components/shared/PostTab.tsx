@@ -14,8 +14,11 @@ const PostTab = async ({currentUserId, accoundId, accountType, replies = false}:
     
     let posts: any;
 
+    console.log(accountType);
+
     if (accountType === 'Community') {
         posts = await fetchCommunityPosts(accoundId);
+        await console.log('421412')
     } else {
         posts = replies ? await fetchUserReplies({userId: accoundId}) : await fetchUserPost({userId: accoundId});
     }

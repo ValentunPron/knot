@@ -81,14 +81,6 @@ const Page = async ({params}: { params: {id: string}}) => {
                         }
                     </section>
                 </TabsContent>
-
-                <TabsContent value="requests" className="w-full text-light-1">
-                    <PostTab 
-                        currentUserId={user.id}
-                        accoundId={communityDetails._id}
-                        accountType='Community'
-                    />
-                </TabsContent>
             </Tabs>
         </section>
     )

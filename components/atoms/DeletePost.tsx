@@ -18,12 +18,10 @@ import {
 import { Button } from "../ui/button";
 
 function DeletePost({
-    userId, 
     authorId,
     content, 
     postId,
-}: {
-    userId: string | null, 
+}: { 
     authorId: string, 
     content: string
     postId: string,
@@ -31,20 +29,12 @@ function DeletePost({
     const router = useRouter();
     const pathname = usePathname();
     
-    if(userId !== authorId) {
-        return null
-    }
-
     async function handleClick() {
-        if(!userId) {
-            redirect('/sing-in')
+        await deletePostId({authorId, postId});
+        if(pathname === '/' || pathname.match(/^\/profile/)) {
+            router.refresh();
         } else {
-            await deletePostId({authorId, postId});
-            if(pathname === '/' || pathname.match(/^\/profile/)) {
-                router.refresh();
-            } else {
-                router.push('/');
-            }
+            router.push('/');
         }
     }
 
@@ -56,7 +46,7 @@ function DeletePost({
                     alt="delete post"
                     width={24} 
                     height={24}
-                    className="cursor-pointer"
+                    className="object-contain cursor-pointer hover:opacity-85"
                 />
             </DialogTrigger>
             <DialogContent>

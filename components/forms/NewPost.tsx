@@ -18,14 +18,24 @@ FormMessage,
 import { Textarea } from '../ui/textarea';
 import { PostValidation } from '@/lib/validations/post';
 import { textCreatedPost } from '@/constants';
-import { createPost } from '@/lib/actions/post.actions';
+import { createPost, editPost } from '@/lib/actions/post.actions';
 import { useOrganization } from '@clerk/nextjs';
 import Image from 'next/image';
 import { Input } from '../ui/input';
 import { isBase64Image } from '@/lib/utils';
 import { useUploadThing } from '@/lib/uploadthing';
+import closeImage from '@/assets/close.svg';
 
-function NewPost({userId, repostedText}: {userId: string, repostedText?: string}) {
+
+interface Props {
+    userId: string,
+    postId?: string,
+    postText?: string, 
+    postImage?: string,
+    repostedText?: string
+}
+
+function NewPost({userId, postId, postText, postImage, repostedText}: Props) {
     const router = useRouter();
     const pathname = usePathname();
     const { organization } = useOrganization();
@@ -42,40 +52,61 @@ function NewPost({userId, repostedText}: {userId: string, repostedText?: string}
     const form = useForm({
         resolver: zodResolver(PostValidation),
         defaultValues: {
-            post: '',
-            post_photo: '',
+            post: postText || '',
+            post_photo: postImage || '',
             accountId: userId
         }
     });
+
+    function validatePhotoFormat(file: any) {
+        // Перевірити, чи файл є зображенням
+        if (!file.type.startsWith("image/")) {
+          return false;
+        }
+      
+        // Отримати розширення файлу
+        const extension = file.name.split(".").pop().toLowerCase();
+      
+        // Допустимі формати фотографій
+        const allowedFormats = ["jpg", "jpeg", "png", "webp", 'jfif', 'svg'];
+      
+        // Перевірити, чи розширення файлу є одним із допустимих
+        return allowedFormats.includes(extension);
+      }
 
     const handleImage = (e: ChangeEvent<HTMLInputElement>, fieldChange: (value: string) => void) => {
         e.preventDefault();
         
         const fileReader = new FileReader();
-  
+
         if(e.target.files && e.target.files.length > 0) {
-          const file = e.target.files[0];
-  
-          setFiles(Array.from(e.target.files));
-  
-          if(!file.type.includes('image')) return;
-  
-          fileReader.onload = async (event) => {
-            const imageDataUrl = event.target?.result?.toString() || '';
-            console.log(imageDataUrl);
+            const file = e.target.files[0];
     
-            fieldChange(imageDataUrl);
+            if(validatePhotoFormat(file)) {
+                setFiles(Array.from(e.target.files));
+    
+                if(!file.type.includes('image')) return;
+        
+                fileReader.onload = async (event) => {
+                  const imageDataUrl = event.target?.result?.toString() || '';
+          
+                  fieldChange(imageDataUrl);
+                }
+          
+                fileReader.readAsDataURL(file);
+            } else {
+                alert('Неправильний формат фотографії');
+            }
           }
-    
-          fileReader.readAsDataURL(file);
-        }
     }
 
     const onSubmit = async (values: z.infer<typeof PostValidation>) => {
         const blob = values.post_photo;
 
+        console.log(blob);
+
         if(blob) {
-            const hasImageChanged = isBase64Image(blob);
+            const hasImageChanged = await isBase64Image(blob);
   
             if(hasImageChanged) {
               const imgRes = await startUpload(files);
@@ -86,16 +117,23 @@ function NewPost({userId, repostedText}: {userId: string, repostedText?: string}
             }
         }
 
-        await console.log('IMAGE', values.post_photo);
-
-        await createPost({ 
-            text: values.post,
-            author: userId,
-            communityId: organization ? organization.id : null,
-            image: values.post_photo,
-            path: pathname,
-        
-        });
+        if(postText && postImage && postId) {
+            await editPost({
+                postId,
+                text: values.post,
+                image: values.post_photo || "",
+                path: pathname
+            })
+        } else {
+            await createPost({ 
+                text: values.post,
+                author: userId,
+                communityId: organization ? organization.id : null,
+                image: values.post_photo,
+                path: pathname,
+            
+            });
+        }
 
         router.push('/')
     }
@@ -132,13 +170,23 @@ function NewPost({userId, repostedText}: {userId: string, repostedText?: string}
                                         {
                                             field.value
                                             && 
-                                            <Image 
-                                                src={field.value}
-                                                alt='post photo'
-                                                width={100}
-                                                height={100}
-                                                className='object-cover w-full h-auto max-h-[500px]'
-                                            />
+                                            <div className='relative w-full max-h-[500px] text-right'>
+                                                <Button onClick={(e) => {e.preventDefault(); field.onChange("")}} className="absolute bg-white w-10 h-10 right-4 top-4 text-sm text-base font-semibold text-[red] z-10 shadow-sm">
+                                                    <Image 
+                                                        src={closeImage}
+                                                        alt="close"
+                                                        width={20}
+                                                        height={20}
+                                                    />
+                                                </Button>
+                                                <Image 
+                                                    src={field.value}
+                                                    alt='post photo'
+                                                    width={100}
+                                                    height={100}
+                                                    className='object-cover w-full h-full relative z-0'
+                                                />
+                                            </div>
                                         }
                                     </FormLabel>
                                     <FormControl className='flex-1 text-base-semibold text-gray-200'>
@@ -161,7 +209,7 @@ function NewPost({userId, repostedText}: {userId: string, repostedText?: string}
                     )}
                 />
                 <Button type="submit" className='comment-form_btn'>
-                    Створити пост
+                    {  postId ? 'Редагувати' : 'Створити' } пост
                 </Button>
             </form>
         </Form>
