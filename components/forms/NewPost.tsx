@@ -117,7 +117,9 @@ function NewPost({userId, postId, postText, postImage, repostedText}: Props) {
             }
         }
 
-        if(postText && postImage && postId) {
+        console.log(postText && postImage && postId);
+
+        if(postText && postId) {
             await editPost({
                 postId,
                 text: values.post,
