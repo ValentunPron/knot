@@ -1,7 +1,7 @@
-import { fetchUsers } from "@/lib/actions/user.actions";
+import { reccomendUsers } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs";
 import UserCard from "../cards/UserCard";
-import { fetchCommunities } from "@/lib/actions/community.actions";
+import { fetchCommunities, reccomendCommunity } from "@/lib/actions/community.actions";
 import React from "react";
 
 async function RightSidebar() {
@@ -11,8 +11,10 @@ async function RightSidebar() {
         return null
     }
 
-    const recommendUsers = await fetchUsers({userId: user.id, pageSize: 4});
-    const reccomentComumunities = await fetchCommunities({pageSize: 4});
+    const recommendUsersArray = await reccomendUsers(user.id);
+    const reccomentComumunitiArray = await reccomendCommunity(user.id);
+
+    console.log(recommendUsersArray.length);
     
     return (
         <section className={`custom-scrollbar rightsidebar`}>
@@ -20,9 +22,9 @@ async function RightSidebar() {
                 <h3 className="text-heading4-medium text-light-1">Рекомендовані користувачі</h3>
                 <div className="mt-4 flex flex-col gap-6">
                     {
-                        !recommendUsers.users && recommendUsers.users < 0
+                        recommendUsersArray && recommendUsersArray.length <= 0
                         ? <p className="no-result">Користувачів не найдено</p>
-                        : recommendUsers.users.map((user) => (
+                        : recommendUsersArray.map((user) => (
                             <UserCard 
                                 key={`reccomentUser_${user.id}`}
                                 id={user.id}
@@ -40,9 +42,9 @@ async function RightSidebar() {
                 <h3 className="text-heading4-medium text-light-1">Рекомендовані спільноти</h3>
                 <div className="mt-4 flex flex-col gap-6">
                     {
-                        !reccomentComumunities.communities && reccomentComumunities.communities < 0
-                        ? <p className="no-result">Користувачів не найдено</p>
-                        : reccomentComumunities.communities.map((community) => (
+                        reccomentComumunitiArray && reccomentComumunitiArray.length <= 0
+                        ? <p className="no-result">Спільноти не найдено</p>
+                        : reccomentComumunitiArray.map((community) => (
                             <UserCard 
                                 key={`reccomentCommunity_${community.id}`}
                                 id={community.id}

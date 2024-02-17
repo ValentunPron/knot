@@ -31,26 +31,30 @@ const PostTab = async ({currentUserId, accoundId, accountType, replies = false}:
 
     return (
         <section className="mt-9 flex flex-col gap-10">
-            {posts.posts.map((post: any) => (
-                <PostCard 
-                    key={post._id}
-                    id={post._id}
-                    currentUserId={currentUserId}
-                    parentId={post.parentId}
-                    content={post.text}
-                    image={post.image}
-                    author={
-                        accountType === 'User' 
-                        ? { name: posts.name, image: posts.image, id: posts.id }
-                        : { name: post.author.name, image: post.author.image, id: post.author.id}
-                    }
-                    likes={post.likes}
-                    likedStatus={userInfo.liked.includes(post._id)}
-                    community={post.community}
-                    createdAt={post.createdAt}
-                    comments={post.children}
-                />
-            ))}
+            {
+                posts.posts.length <= 0
+                ? <p className="no-result">Користувач ще неписав пости</p>
+                : posts.posts.map((post: any) => (
+                    <PostCard 
+                        key={post._id}
+                        id={post._id}
+                        currentUserId={currentUserId}
+                        parentId={post.parentId}
+                        content={post.text}
+                        image={post.image}
+                        author={
+                            accountType === 'User' 
+                            ? { name: posts.name, image: posts.image, id: posts.id }
+                            : { name: post.author.name, image: post.author.image, id: post.author.id}
+                        }
+                        likes={post.likes}
+                        likedStatus={userInfo.liked.includes(post._id)}
+                        community={post.community}
+                        createdAt={post.createdAt}
+                        comments={post.children}
+                    />
+                ))
+            }
         </section>
     )
 }

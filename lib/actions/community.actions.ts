@@ -60,7 +60,8 @@ export async function fetchCommunityDetails(id: string) {
         model: User,
         select: "name username image _id id",
       },
-    ]);
+    ])
+    ;
 
     return communityDetails;
   } catch (error) {
@@ -82,6 +83,11 @@ export async function fetchCommunityPosts(id: string) {
           path: "author",
           model: User,
           select: "name image id", // Select the "name" and "_id" fields from the "User" model
+        },
+        {
+          path: 'likes',
+          model: User,
+          select: '_id id name username image'
         },
         {
           path: "children",
@@ -161,6 +167,25 @@ export async function fetchCommunities({
   } catch (error) {
     console.error("Error fetching communities:", error);
     throw error;
+  }
+}
+
+export const reccomendCommunity = async (userId: string) => {
+  try {
+      connectToDB();
+
+      const user = await User.findOne({id: userId});
+
+      if (!user) {
+          throw new Error('Користувача не найдено');
+      }
+
+      const filterCommunity = await Community.find({ _id: { $nin: user.communities }}).limit(4);
+
+      return filterCommunity
+
+  } catch (error: any) {
+      throw new Error(`Не вдалося загрузити активність користувача: ${error.message}`);
   }
 }
 

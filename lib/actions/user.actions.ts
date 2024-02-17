@@ -8,6 +8,7 @@ import User from "../models/user.model";
 import Post from "../models/post.model";
 import Community from "../models/community.model";
 import { clerkClient } from "@clerk/nextjs";
+import { error } from "console";
 
 interface Params {
     userId: string,
@@ -122,6 +123,25 @@ export const fetchUsers = async ({userId, searchString = '', pageNumber = 1, pag
         return { users, isNext }
     } catch (error: any) {
         throw new Error(`Невдалося загрузити пости користувача: ${error.message}`);
+    }
+}
+
+export const reccomendUsers = async (userId: string) => {
+    try {
+        connectToDB();
+
+        const user = await User.findOne({id: userId});
+
+        if (!user) {
+            throw new Error('Користувача не найдено');
+        }
+
+        const filterUser = await User.find({ _id: { $nin: user.following, $ne: user._id }}).limit(4);
+
+        return filterUser
+
+    } catch (error: any) {
+        throw new Error(`Не вдалося загрузити активність користувача: ${error.message}`);
     }
 }
 

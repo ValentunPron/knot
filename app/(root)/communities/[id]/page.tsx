@@ -5,9 +5,8 @@ import { communityTabs } from "@/constants";
 
 import ProfileHeader from "@/components/shared/ProfileHeader";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { fecthUser } from "@/lib/actions/user.actions";
 import PostTab from "@/components/shared/PostTab";
-import { fetchCommunityDetails } from "@/lib/actions/community.actions";
+import { fetchCommunityDetails, fetchCommunityPosts } from "@/lib/actions/community.actions";
 import UserCard from "@/components/cards/UserCard";
 
 const Page = async ({params}: { params: {id: string}}) => {
@@ -18,6 +17,12 @@ const Page = async ({params}: { params: {id: string}}) => {
     }
 
     const communityDetails = await fetchCommunityDetails(params.id);
+
+    if(!communityDetails) {
+        return null
+    }
+
+    const communityPosts = await fetchCommunityPosts(communityDetails._id);
 
     return (
         <section>
@@ -60,7 +65,7 @@ const Page = async ({params}: { params: {id: string}}) => {
                 <TabsContent value="posts" className="w-full text-light-1">
                     <PostTab 
                         currentUserId={user.id}
-                        accoundId={communityDetails._id}
+                        accoundId={communityPosts._id}
                         accountType='Community'
                     />
                 </TabsContent>
