@@ -160,12 +160,11 @@ const PostCard = ({
                                 <Link href={`/post/${id}`}>
                                     <Image src={reply} alt="reply" width={26} height={26} className="cursor-pointer object-contain"/>
                                 </Link>
-                                {/* <RepostedPost 
+                                <RepostedPost 
                                     userId={currentUserId}
                                     content={content}
                                     image={image}
-                                    community={community}
-                                /> */}
+                                />
                             </div>
 
                             <div className="flex gap-2 mt-2">

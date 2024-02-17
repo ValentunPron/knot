@@ -43,6 +43,25 @@ export async function createPost({text, author, communityId, image, path}: Param
     }
 }
 
+export async function repostedPost({text, author, image, path}: {text: string, author: string, image: string, path: string}) {
+    try {
+        connectToDB();
+
+        const user = await User.findOne({id: author});
+
+        const post = await Post.create({text, author: user._id, image, community: null});
+    
+        await User.findByIdAndUpdate(user._id, {
+            $push: { posts: post._id }
+        });
+    
+
+        revalidatePath(path);
+    } catch (error: any) {
+        throw new Error(`Відбулася помилка при створені поста: ${error.message}`)
+    }
+}
+
 export async function editPost({
     postId,
     text,
@@ -281,34 +300,4 @@ export async function likedPost({userId, postId}: {userId: string, postId: strin
     } catch (error: any) {
         throw new Error(`Не вдалося добавити лайк ${error.message}`);
       }
-}
-
-export async function repostedPost({text, author, communityId, path}: Params) {
-    try {
-        connectToDB();
-
-        const communityIdObject = await Community.findOne(
-            { id: communityId },
-            { _id: 1 }
-        );
-
-        const currentUser = await User.findOne({id: author});
-        const currentUserId = currentUser._id
-
-        const post = await Post.create({text, author: currentUserId, community: communityIdObject});
-    
-        await User.findByIdAndUpdate(currentUserId, {
-            $push: { posts: post._id }
-        });
-
-        if (communityIdObject) {
-            await Community.findByIdAndUpdate(communityIdObject, {
-              $push: { posts: post._id },
-            });
-        }
-    
-        revalidatePath(path);
-    } catch (error: any) {
-        throw new Error(`Відбулася помилка при створені поста: ${error.message}`)
-    }
 }

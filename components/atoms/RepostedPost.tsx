@@ -3,7 +3,7 @@
 import Image from "next/image";
 
 import repost from "@/assets/repost.svg";
-import { createPost } from "@/lib/actions/post.actions";
+import { createPost, repostedPost } from "@/lib/actions/post.actions";
 import React from "react";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -23,17 +23,11 @@ function RepostedPost({
     userId,
     content,
     image,
-    community,
-    
+
 }: {
     userId: string | null,
     content: string,
     image: string,
-    community: {
-        id: string,
-        name: string,
-        image: string,
-    } | null,
 }) {
     const router = useRouter();
     const pathname = usePathname();
@@ -42,10 +36,9 @@ function RepostedPost({
         if(!userId) {
             router.push('/sing-in');
         } else {
-            await createPost({ 
+            await repostedPost({ 
                 text: content,
                 author: userId,
-                communityId: community ? community.id : null,
                 image: image ? image : '',
                 path: pathname,
             });
