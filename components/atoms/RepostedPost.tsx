@@ -26,7 +26,7 @@ function RepostedPost({
     community,
     
 }: {
-    userId: string,
+    userId: string | null,
     content: string,
     image: string,
     community: {
@@ -39,15 +39,19 @@ function RepostedPost({
     const pathname = usePathname();
 
     async function onSubmit() {
-        await createPost({ 
-            text: content,
-            author: userId,
-            communityId: community ? community.id : null,
-            image: image ? image : '',
-            path: pathname,
-        });
+        if(!userId) {
+            router.push('/sing-in');
+        } else {
+            await createPost({ 
+                text: content,
+                author: userId,
+                communityId: community ? community.id : null,
+                image: image ? image : '',
+                path: pathname,
+            });
 
-        router.push(`/profile/${userId}`)
+            router.push(`/profile/${userId}`)
+        }
     }
     
     return (
@@ -72,7 +76,7 @@ function RepostedPost({
                                 <Button className="rounded-full w-24 hover:opacity-85">Ні</Button>
                             </DialogClose>
                             <DialogClose asChild>
-                                <Button className="comment-form_btn w-24 hover:opacity-85">Так</Button>
+                                <Button className="comment-form_btn w-24 hover:opacity-85" onClick={onSubmit}>Так</Button>
                             </DialogClose>
                         </div>
                     </div>
