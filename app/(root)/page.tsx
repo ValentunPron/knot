@@ -1,4 +1,5 @@
 import PostCard from "@/components/cards/PostCard";
+import NewPost from "@/components/forms/NewPost";
 import Pagination from "@/components/shared/Pagination";
 import { fetchPost } from "@/lib/actions/post.actions"
 import { fecthUser } from "@/lib/actions/user.actions";
@@ -17,6 +18,10 @@ export default async function Home({searchParams} : {searchParams: { [key: strin
   return (
     <>
       <h1 className="head-text text-left">Головна</h1>
+
+      {
+        userInfo &&  <NewPost userId={userInfo._id} mainPages={true} />
+      }
 
       <section className="mt-9 flex flex-col gap-10">
         {

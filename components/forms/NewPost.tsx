@@ -33,9 +33,10 @@ interface Props {
     postText?: string, 
     postImage?: string,
     repostedText?: string
+    mainPages?: boolean
 }
 
-function NewPost({userId, postId, postText, postImage, repostedText}: Props) {
+function NewPost({userId, postId, postText, postImage, repostedText, mainPages = false}: Props) {
     const router = useRouter();
     const pathname = usePathname();
     const { organization } = useOrganization();
@@ -103,8 +104,6 @@ function NewPost({userId, postId, postText, postImage, repostedText}: Props) {
     const onSubmit = async (values: z.infer<typeof PostValidation>) => {
         const blob = values.post_photo;
 
-        console.log(blob);
-
         if(blob) {
             const hasImageChanged = await isBase64Image(blob);
   
@@ -116,8 +115,6 @@ function NewPost({userId, postId, postText, postImage, repostedText}: Props) {
               }
             }
         }
-
-        console.log(postText && postImage && postId);
 
         if(postText && postId) {
             await editPost({
@@ -133,11 +130,11 @@ function NewPost({userId, postId, postText, postImage, repostedText}: Props) {
                 communityId: organization ? organization.id : null,
                 image: values.post_photo,
                 path: pathname,
-            
             });
         }
 
-        router.push('/')
+        form.reset();
+        router.push('/');
     }
 
     return (
@@ -156,8 +153,8 @@ function NewPost({userId, postId, postText, postImage, repostedText}: Props) {
                             {messagePost}
                         </FormLabel>
                         <FormControl className='no-focus border-dark-4 bg-dark-3 text-light-1'>
-                            <Textarea 
-                                rows={15}
+                            <Textarea
+                                rows={mainPages ? 5 : 15}
                                 className='resize-none'
                                 {...field}
                             />
