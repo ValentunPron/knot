@@ -133,7 +133,7 @@ function NewPost({userId, postId, postText, postImage, repostedText, mainPages =
             });
         }
 
-        form.reset();
+        form.reset()
         router.push('/');
     }
 

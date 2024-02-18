@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import moment from 'moment-timezone';
 
 const postSchema = new mongoose.Schema({
     text: {
@@ -23,7 +24,7 @@ const postSchema = new mongoose.Schema({
     ],
     createdAt: {
         type: Date,
-        default: Date.now,
+        default: moment.tz(Date.now(), 'Europe/Kyiv'),
     }, 
     parentId: {
         type: String,
