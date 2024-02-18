@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { format } from 'date-fns';
+import { format, utcToZonedTime  } from 'date-fns-tz';
 import { uk } from 'date-fns/locale';
 
 import reply from "@/assets/reply.svg";
@@ -57,7 +57,8 @@ const PostCard = ({
     isComment,
     isFullPost = false,
 }: Props) => {
-    const date = format(new Date(createdAt),"HH:mm - dd MMMM yyyy", {locale: uk});
+    const zonedDate = utcToZonedTime(new Date(createdAt), 'Europe/Kiev');
+    const date  = format(zonedDate, "HH:mm - dd MMMM yyyy", { locale: uk });
 
     function truncateText(text: string) {
         if (text.length > 447) {
