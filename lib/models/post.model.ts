@@ -24,7 +24,7 @@ const postSchema = new mongoose.Schema({
     ],
     createdAt: {
         type: Date,
-        default: moment.tz(Date.now(), 'Europe/Kyiv'),
+        default: moment.tz(Date.now(), 'Europe/Kiev'),
     }, 
     parentId: {
         type: String,
