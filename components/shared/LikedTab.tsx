@@ -39,6 +39,7 @@ const LikedTab = async ({currentUserId, accoundId, accountType}: Props) => {
                         likedStatus={userInfo.liked.includes(post._id)}
                         community={post.community}
                         createdAt={post.createdAt}
+                        isEdit={post.isEdit}
                         comments={post.children}
                     />
                 )) 

@@ -40,6 +40,7 @@ const Page = async ({params}: {params: {id: string}}) => {
                 likedStatus={userInfo.liked.includes(post._id)}
                 community={post.community}
                 createdAt={post.createdAt}
+                isEdit={post.isEdit}
                 comments={post.children}
             />
            </div>

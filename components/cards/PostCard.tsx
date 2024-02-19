@@ -38,6 +38,7 @@ interface Props {
             name: string,
         }
     }[],
+    isEdit?: boolean,
     isComment?: boolean,
     isFullPost?: boolean,
 }
@@ -55,6 +56,7 @@ const PostCard = ({
     createdAt,
     comments,
     isComment,
+    isEdit,
     isFullPost = false,
 }: Props) => {
     const date = format(new Date(createdAt), "HH:mm - dd MMMM yyyy", {locale: uk});
@@ -200,7 +202,7 @@ const PostCard = ({
                             {
                                 isComment && (
                                     <p className="mt-4 text-subtle-medium text-gray-1">
-                                        {date}
+                                        {isEdit && 'Редаговано:'} {date}
                                     </p>
                                 )
                             }
@@ -271,7 +273,7 @@ const PostCard = ({
             {
                 !isComment && (
                     <p className="mt-4 text-subtle-medium text-gray-1">
-                        {date}
+                        {isEdit && 'Редаговано:'} {date}
                      </p>
                 )
             }

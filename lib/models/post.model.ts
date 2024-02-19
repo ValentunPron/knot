@@ -29,6 +29,9 @@ const postSchema = new mongoose.Schema({
     parentId: {
         type: String,
     },
+    isEdit: {
+        type: Boolean,
+    },
     children: [
         {
             type: mongoose.Schema.Types.ObjectId,

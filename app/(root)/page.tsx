@@ -43,6 +43,7 @@ export default async function Home({searchParams} : {searchParams: { [key: strin
                     likedStatus={userInfo !== null ? userInfo.liked.includes(post._id): false}
                     community={post.community}
                     createdAt={post.createdAt}
+                    isEdit={post.isEdit}
                     comments={post.children}
                   />
                 ))

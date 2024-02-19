@@ -84,6 +84,8 @@ export async function editPost({
   
       post.text = text;
       post.image = image;
+      post.isEdit = true;
+      post.createdAt = Date.now()
   
       await post.save();
   

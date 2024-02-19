@@ -40,6 +40,7 @@ const Page = async ({params}: {params: {id: string}}) => {
                 community={post.community}
                 createdAt={post.createdAt}
                 comments={post.children}
+                isEdit={post.isEdit}
                 isFullPost={true}
             />
            </div>
@@ -67,6 +68,7 @@ const Page = async ({params}: {params: {id: string}}) => {
                     community={postItem.community}
                     createdAt={postItem.createdAt}
                     comments={postItem.children}
+                    isEdit={postItem.isEdit}
                     isComment
                 />
             ))}

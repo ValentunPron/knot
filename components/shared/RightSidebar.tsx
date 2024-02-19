@@ -13,8 +13,6 @@ async function RightSidebar() {
 
     const recommendUsersArray = await reccomendUsers(user.id);
     const reccomentComumunitiArray = await reccomendCommunity(user.id);
-
-    console.log(recommendUsersArray.length);
     
     return (
         <section className={`custom-scrollbar rightsidebar`}>
